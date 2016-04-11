@@ -1,0 +1,24 @@
+{
+  "name": "neuralnetworkvisualisation",
+  "version": "1.0.0",
+  "description": "Neural Network in brain.js visualised with D3.js",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DinerIsmail/NeuralNetworkVisualisation.git"
+  },
+  "author": "Diner Ismail",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DinerIsmail/NeuralNetworkVisualisation/issues"
+  },
+  "homepage": "https://github.com/DinerIsmail/NeuralNetworkVisualisation#readme",
+  "devDependencies": {
+    "brain": "^0.7.0",
+    "fast-csv": "^1.1.0",
+    "jquery": "^2.2.3"
+  }
+}

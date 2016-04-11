@@ -10,28 +10,42 @@ var xPos = d3.scale.linear()
 
 var yPos = function(layerId) {
   return d3.scale.ordinal()
-              .domain(d3.range(0, nnData.layers[layerId].nodes.length))
+              .domain(d3.range(0, nnData.layers[layerId].size))
               .rangeBands([0, height]);
 }
 
-d3.select(".neuralnetwork")
+var svg = d3.select(".neuralnetwork")
     .attr("width", width)
     .attr("height", height)
-    .style("background", "#C9D7D6")
+    .style("background", "#C9D7D6");
 
-var layers = nnData.layers;
-layers.forEach(function(layer, layerId) {
+function draw() {
+  var layers = nnData.layers;
+  layers.forEach(function(layer, layerId) {
 
-  d3.select(".neuralnetwork")
-        .selectAll("circle.layer"+layerId).data(layer.nodes)
-          .enter().append("circle").classed("layer"+layerId, true)
-          .style("fill", "#268BD2")
-          .attr("r", nodeRadius)
-          .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.nodes.length)/2 })
-          .attr("cx", function(d) { return xPos(layerId) })
-          .attr("class", function(d, i) { return "node"+layerId+i; })
-          .classed("node", true)
-});
+    var layerNodes = [];
+    for (var i = 0; i < layer.size; i++) {
+      layerNodes.push(layer[i]);
+    }
+
+    svg.selectAll("circle.layer"+layerId).data(layerNodes)
+            .enter()
+            .append("circle").classed("layer"+layerId, true)
+              .style("fill", "#268BD2")
+              .attr("r", nodeRadius)
+              .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
+              .attr("cx", function(d) { return xPos(layerId) })
+              .attr("class", function(d, i) { return "node"+layerId+i; })
+              .classed("node", true)
+  });
+
+  console.log("Drawn!")
+}
+
+(function(){
+  draw();
+  setTimeout(arguments.callee, 100);
+})();
 
 var nodesCoordinates = [];
 
@@ -53,14 +67,14 @@ var lineFunction = d3.svg.line()
                         .y(function(d) { return d.y })
                         .interpolate("linear")
 
-var connections = nnData.connections;
-connections.forEach(function(connection, connectionId) {
-  var lineData = [getNodeCoordinates(connection.from),
-                  getNodeCoordinates(connection.to)];
-  d3.select(".neuralnetwork")
-          .append("path").classed("connection", true)
-          .attr("stroke", "white")
-          .attr("stroke-width", 2)
-          .attr("fill", "none")
-          .attr("d", lineFunction(lineData))
-});
+// var connections = nnData.connections;
+// connections.forEach(function(connection, connectionId) {
+//   var lineData = [getNodeCoordinates(connection.from),
+//                   getNodeCoordinates(connection.to)];
+//   d3.select(".neuralnetwork")
+//           .append("path").classed("connection", true)
+//           .attr("stroke", "white")
+//           .attr("stroke-width", 2)
+//           .attr("fill", "none")
+//           .attr("d", lineFunction(lineData))
+// });
