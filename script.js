@@ -4,6 +4,8 @@ var height = 600,
 var outerPad = 0.1,
     pad = 0;
 
+var nnData = nnDataTest;
+
 var xPos = d3.scale.linear()
                 .domain([0, nnData.layers.length])
                 .range([50, width-50]);
@@ -20,6 +22,8 @@ var svg = d3.select(".neuralnetwork")
     .style("background", "#C9D7D6");
 
 function draw() {
+  clear();
+
   var layers = nnData.layers;
   layers.forEach(function(layer, layerId) {
 
@@ -38,14 +42,35 @@ function draw() {
               .attr("class", function(d, i) { return "node"+layerId+i; })
               .classed("node", true)
   });
-
-  console.log("Drawn!")
 }
 
-(function(){
-  draw();
-  setTimeout(arguments.callee, 100);
-})();
+function clear() {
+  $(".neuralnetwork").empty();
+}
+
+draw();
+
+// -------------- Socket.IO --------------------------------
+
+$(document).ready(function() {
+  var socket = io();
+  var $refreshForm = $("#refresh-graph");
+
+  $refreshForm.submit(function(e) {
+    e.preventDefault();
+    socket.emit('refresh-graph');
+  });
+
+  socket.on('refresh-graph', function(nnJSON) {
+    nnData = nnJSON;
+    draw();
+  });
+});
+
+
+
+
+//-----------------------------------------------------------
 
 var nodesCoordinates = [];
 

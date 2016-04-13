@@ -18,7 +18,9 @@
   "homepage": "https://github.com/DinerIsmail/NeuralNetworkVisualisation#readme",
   "devDependencies": {
     "brain": "^0.7.0",
+    "express": "^4.13.4",
     "fast-csv": "^1.1.0",
-    "jquery": "^2.2.3"
+    "jquery": "^2.2.3",
+    "socket.io": "^1.4.5"
   }
 }

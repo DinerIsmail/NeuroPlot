@@ -9,13 +9,16 @@
 </head>
 
 <body>
+  <form id="refresh-graph">
+    <input type="submit"></input>
+  </form>
   <div class="container">
     <svg class="neuralnetwork"></svg>
   </div>
   <script src='https://code.jquery.com/jquery-2.2.3.min.js'></script>
-  <!--<script type="text/javascript" src="data/neuralnetwork.json"></script>-->
-  <script type="text/javascript" src="app.js"></script>
-  <script type="text/javascript" src="d3.min.js"></script>
+  <script type="text/javascript" src="data/neuralnetwork.json"></script>
+  <script type="text/javascript" src="/lib/d3.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="script.js"></script>
 </body>
 </html>
