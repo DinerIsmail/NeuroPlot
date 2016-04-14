@@ -88,11 +88,16 @@ draw();
 
 $(document).ready(function() {
   var socket = io();
-  var $refreshForm = $("#refresh-graph");
+  var refreshForm = $("#refresh-graph");
+  var learningRateTextBox = $("[name='learning-rate']");
+  var iterationsTextBox = $("[name='iterations']");
+  var parameters = {};
 
-  $refreshForm.submit(function(e) {
+  refreshForm.submit(function(e) {
     e.preventDefault();
-    socket.emit('refresh-graph');
+    parameters.learningRate = learningRateTextBox.val();
+    parameters.iterations = iterationsTextBox.val();
+    socket.emit('refresh-graph', parameters);
   });
 
   socket.on('refresh-graph', function(nnJSON) {

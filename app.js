@@ -5,7 +5,7 @@ var net = new brain.NeuralNetwork({
     hiddenLayers: [3, 4]
 });
 
-function runNN(callback) {
+function runNN(callback, parameters) {
   datamanager.getTrainingData(function(unParsedData) {
       var data = datamanager.parseDataForNN(unParsedData);
       data = [{input: [0, 0], output: [0]},
@@ -15,10 +15,10 @@ function runNN(callback) {
 
       net.train(data, {
                   errorThresh: 0.005,
-                  iterations: 10000,
+                  iterations: parameters.iterations || 10000,
                   log: false,
                   logPeriod: 10,
-                  learningRate: 0.3
+                  learningRate: parameters.learningRate || 0.3
           });
 
       var output = net.run([1, 0]);
@@ -51,9 +51,10 @@ app.get('/data/neuralnetwork.json', function(req, res) {
 });
 
 io.sockets.on('connection', function(socket) {
-  socket.on('refresh-graph', function() {
+  socket.on('refresh-graph', function(nnParameters) {
+    console.log(nnParameters);
     runNN(function(nnJSON) {
       io.sockets.emit('refresh-graph', nnJSON);
-    });
+    }, nnParameters);
   });
 });

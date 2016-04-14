@@ -12,7 +12,7 @@ function getTrainingData(callback) {
         dataRows.push(data);
      })
      .on("end", function(){
-        console.log("Done reading csv file!");
+        //console.log("Done reading csv file!");
         if (callback) callback(dataRows);
      });
 }
