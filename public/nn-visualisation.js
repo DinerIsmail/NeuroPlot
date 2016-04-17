@@ -1,3 +1,12 @@
+// Augmenting the Array prototype with max and min functions
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};
+
+
 var height = 600,
     width = 1000,
     nodeRadius = 30;
@@ -21,14 +30,22 @@ var lineFunction = d3.svg.line()
                         .y(function(d) { return d.y })
                         .interpolate("linear")
 
+var strokeWidthFunction = function(weight, minWeight, maxWeight) {
+  return d3.scale.linear()
+              .domain([minWeight, maxWeight])
+              .range([2, 8]);
+}
+
 var svg = d3.select(".neuralnetwork")
     .attr("width", width)
-    .attr("height", height)
-    .style("background", "#C9D7D6");
+    .attr("height", height);
 
 function draw() {
   clear();
   var nnConnections = [];
+
+  var drawingLayer1 = svg.append('g');
+  var drawingLayer2 = svg.append('g');
 
   var layers = nnData.layers;
   layers.forEach(function(layer, layerId) {
@@ -52,26 +69,35 @@ function draw() {
       }
     }
 
-    svg.selectAll("circle.layer"+layerId).data(layerNodes)
+    drawingLayer2.selectAll("circle.layer"+layerId).data(layerNodes)
             .enter()
-            .append("circle").classed("layer"+layerId, true)
+            .append("circle")
               .style("fill", "#268BD2")
-              .attr("r", nodeRadius)
+              .transition()
+                .each("start", function() { d3.select(this).attr("r", 10) })
+                .attr("r", nodeRadius)
+                .duration(750)
+                .ease('elastic')
               .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
               .attr("cx", function(d) { return xPos(layerId) })
-              .attr("class", function(d, i) { return "node"+layerId+i; })
-              .classed("node", true)
+              .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
+
   });
 
   if (nnConnections.length > 0) {
+    var allWeights = nnConnections.map(function(conn) { return conn.weight; });
+    var minWeight = allWeights.min();
+    var maxWeight = allWeights.max();
+
     nnConnections.forEach(function(connection) {
       var lineData = [{x: connection.x1, y: connection.y1},
                       {x: connection.x2, y: connection.y2}];
 
-      d3.select(".neuralnetwork")
-              .append("path").classed("connection", true)
-              .attr("stroke", "white")
-              .attr("stroke-width", 2)
+      drawingLayer1.append("path").classed("connection", true)
+              .attr("stroke", function() { return connection.weight >= 0 ? "#3FBF7F" : "#D54848"; })
+              .attr("stroke-width", function(d, i) {
+                return strokeWidthFunction(connection.weight, minWeight, maxWeight)(connection.weight);
+              })
               .attr("fill", "none")
               .attr("d", lineFunction(lineData));
     });

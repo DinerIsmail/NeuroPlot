@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NeuroPlot - Dashboard</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" type="text/css" href="assets/css/zabuto_calendar.css"> -->
+    <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
+    <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/style-responsive.css" rel="stylesheet">
+
+    <script src="assets/js/chart-master/Chart.js"></script>
+  </head>
+
+  <body>
+
+  <section id="container" >
+      <header class="header black-bg">
+              <div class="sidebar-toggle-box">
+                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+              </div>
+            <a href="index.html" class="logo"><b>NeuroPlot</b></a>
+
+        </header>
+
+      <aside>
+          <div id="sidebar"  class="nav-collapse ">
+              <ul class="sidebar-menu" id="nav-accordion">
+
+              	  <!-- <p class="centered"><a href="profile.html"><img src="assets/img/brain.png" class="img-circle" width="120"></a></p> -->
+              	  <!-- <h3 class="centered">NeuroPlot</h3> -->
+                  <li class="mt">
+                    <form id="refresh-graph">
+                      <label>Learning Rate: <input type="text" name="learning-rate" value="0.3" /></label><br />
+                      <label>Iterations: <input type="text" name="iterations" value="1000" /></label><br />
+                      <input class="btn btn-primary" type="submit" value="Refresh"></input>
+                    </form>
+                  </li>
+
+              </ul>
+          </div>
+      </aside>
+
+      <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper">
+
+              <div class="row">
+                  <div class="col-lg-12 main-chart">
+
+                    <div class="row mt">
+                      <div class="col-md-8 col-sm-8 mb">
+                        <div class="col-md-3 col-sm-8 mb">
+                          <!-- <label class="pull-left">Activation Function </label>
+                          <select id="select-activation-function" class="form-control">
+              						  <option>Sigmoid</option>
+              						  <option>Hyperbolic Tangent</option>
+              						  <option>Step Function</option>
+              						</select> -->
+                        </div>
+                        <!-- <button type="button" class="btn btn-primary pull-right">Start Simulation</button> -->
+
+                        <div class="container">
+                          <svg class="neuralnetwork"></svg>
+                        </div>
+                      </div>
+                      <div class="col-md-4 col-sm-4 mb">
+                        <div class="content-panel">
+                            <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4>
+                            <div class="panel-body">
+                              <!-- <div id="hero-area" class="graph"></div> -->
+                            </div>
+                        </div>
+                        <div class="content-panel">
+                            <!-- <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4> -->
+                            <div class="panel-body">
+                                <div id="hero-bar" class="graph"></div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mt">
+                      <div class="col-md8 col-sm-8 mb">
+
+                      </div>
+
+                      <div class="col-md-4 col-sm-4 mb">
+
+                      </div>
+                    </div>
+                  </div>
+
+              </div>
+          </section>
+      </section>
+
+      <!-- <footer class="site-footer">
+          <div class="text-center">
+              2016
+              <a href="index.html#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer> -->
+  </section>
+
+    <!-- <script src="assets/js/jquery.js"></script> -->
+    <script src='https://code.jquery.com/jquery-2.2.3.min.js'></script>
+    <script type="text/javascript" src="../data/neuralnetwork.json"></script>
+    <script type="text/javascript" src="../lib/d3.min.js"></script>
+    <script type="text/javascript" src="../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="nn-visualisation.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <!-- <script src="assets/js/jquery.scrollTo.min.js"></script> -->
+    <!-- <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script> -->
+    <!-- <script src="assets/js/jquery.sparkline.js"></script> -->
+
+    <!--common script for all pages-->
+    <script src="assets/js/common-scripts.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+
+    <!--script for this page-->
+    <!-- <script src="assets/js/sparkline-chart.js"></script> -->
+	<!-- <script src="assets/js/zabuto_calendar.js"></script> -->
+  <script src="assets/js/examplecharts-morris.js"></script>
+
+  </body>
+</html>
