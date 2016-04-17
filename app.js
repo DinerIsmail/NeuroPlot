@@ -14,7 +14,7 @@ function runNN(callback, parameters) {
           {input: [1, 1], output: [0]}];
 
       net.train(data, {
-                  errorThresh: 0.005,
+                  errorThresh: parameters.errorThreshold || 0.005,
                   iterations: parameters.iterations || 10000,
                   log: false,
                   logPeriod: 10,

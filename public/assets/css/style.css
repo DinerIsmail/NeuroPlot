@@ -2198,3 +2198,14 @@ label {
 .site-min-height {
     min-height: 900px;
 }
+
+/*Custom*/
+
+ul.sidebar-menu li label span {
+  color: #fff;
+}
+
+ul.sidebar-menu li input {
+  display: block;
+  width: 120px;
+}

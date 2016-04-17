@@ -116,12 +116,14 @@ $(document).ready(function() {
   var socket = io();
   var refreshForm = $("#refresh-graph");
   var learningRateTextBox = $("[name='learning-rate']");
+  var errorThresholdTextBox = $("[name='error-threshold']");
   var iterationsTextBox = $("[name='iterations']");
   var parameters = {};
 
   refreshForm.submit(function(e) {
     e.preventDefault();
     parameters.learningRate = learningRateTextBox.val();
+    parameters.errorThreshold = errorThresholdTextBox.val();
     parameters.iterations = iterationsTextBox.val();
     socket.emit('refresh-graph', parameters);
   });
