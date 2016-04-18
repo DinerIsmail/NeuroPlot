@@ -6,7 +6,6 @@ Array.prototype.min = function() {
   return Math.min.apply(null, this);
 };
 
-
 var height = 600,
     width = 1000,
     nodeRadius = 30;
@@ -14,6 +13,7 @@ var outerPad = 0.1,
     pad = 0;
 
 var nnData = nnDataTest;
+var layerCount = 0;
 
 var xPos = d3.scale.linear()
                 .domain([0, nnData.layers.length])
@@ -118,6 +118,9 @@ $(document).ready(function() {
   var learningRateTextBox = $("[name='learning-rate']");
   var errorThresholdTextBox = $("[name='error-threshold']");
   var iterationsTextBox = $("[name='iterations']");
+  var addLayerButton = $(".add-hidden-layer");
+  var hiddenLayerSizesArea = $(".hidden-layers-sizes-area");
+  var layerCountLabel = $(".layer-count");
   var parameters = {};
 
   refreshForm.submit(function(e) {
@@ -125,6 +128,7 @@ $(document).ready(function() {
     parameters.learningRate = learningRateTextBox.val();
     parameters.errorThreshold = errorThresholdTextBox.val();
     parameters.iterations = iterationsTextBox.val();
+    parameters.layerSizes = getHiddenLayerSizes();
     socket.emit('refresh-graph', parameters);
   });
 
@@ -132,38 +136,31 @@ $(document).ready(function() {
     nnData = nnJSON;
     draw();
   });
+
+  addLayerButton.click(function() {
+    layerCount++;
+    layerCountLabel.text(layerCount);
+
+    var layerSizeDiv = $("<div>").addClass('layer'+layerCount);
+    var removeLayerButton = $("<button>").addClass("remove-layer").attr("style", "display: inline").appendTo(layerSizeDiv);
+    var removeLayerIcon = $("<i>").addClass("fa fa-minus").attr("aria-hidden", "true").appendTo(removeLayerButton);
+    var input = $("<input>").addClass("layer-size-input").attr("type", "number").attr("value",'1').attr("style", "display: inline").appendTo(layerSizeDiv);
+    hiddenLayerSizesArea.append(layerSizeDiv);
+
+    removeLayerButton.click(function() {
+      $("div."+this.parentNode.className).remove();
+      layerCount--;
+      layerCountLabel.text(layerCount);
+    });
+  });
 });
 
+function getHiddenLayerSizes() {
+  var layerSizeInputs = $(".layer-size-input").toArray();
+  var layerSizes = [];
+  layerSizeInputs.forEach(function(layerSizeInput) {
+    layerSizes.push(parseInt(layerSizeInput.value));
+  });
 
-
-
-//-----------------------------------------------------------
-
-// var nodesCoordinates = [];
-//
-// function getNodeCoordinates(node) {
-//   var nodeCoords = findNodeCircle(node[0], node[1]);
-//   return {
-//     x: nodeCoords[0],
-//     y: nodeCoords[1]
-//   }
-// }
-//
-// function findNodeCircle(layerId, nodeId) {
-//   var nodeCircle = $(".node"+layerId+nodeId);
-//   return [nodeCircle.attr("cx"), nodeCircle.attr("cy")];
-// }
-//
-
-
-// var connections = nnData.connections;
-// connections.forEach(function(connection, connectionId) {
-//   var lineData = [getNodeCoordinates(connection.from),
-//                   getNodeCoordinates(connection.to)];
-//   d3.select(".neuralnetwork")
-//           .append("path").classed("connection", true)
-//           .attr("stroke", "white")
-//           .attr("stroke-width", 2)
-//           .attr("fill", "none")
-//           .attr("d", lineFunction(lineData))
-// });
+  return layerSizes.length > 0 ? layerSizes : null;
+}

@@ -1,11 +1,11 @@
 var brain = require('./lib/brain/lib/brain');
 var datamanager = require('./src/utils/datamanager');
 
-var net = new brain.NeuralNetwork({
-    hiddenLayers: [3, 4]
-});
-
 function runNN(callback, parameters) {
+  var net = new brain.NeuralNetwork({
+      hiddenLayers: parameters.layerSizes || []
+  });
+
   datamanager.getTrainingData(function(unParsedData) {
       var data = datamanager.parseDataForNN(unParsedData);
       data = [{input: [0, 0], output: [0]},
