@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DinerIsmail/NeuralNetworkVisualisation.git"
+    "url": "git+https://github.com/DinerIsmail/NeuroPlot.git"
   },
   "author": "Diner Ismail",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DinerIsmail/NeuralNetworkVisualisation/issues"
+    "url": "https://github.com/DinerIsmail/NeuroPlot/issues"
   },
-  "homepage": "https://github.com/DinerIsmail/NeuralNetworkVisualisation#readme",
+  "homepage": "https://github.com/DinerIsmail/NeuroPlot#readme",
   "devDependencies": {
     "brain": "^0.7.0",
     "express": "^4.13.4",
