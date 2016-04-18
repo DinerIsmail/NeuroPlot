@@ -24,10 +24,7 @@ coverage
 build/Release
 
 # Dependency directories
-node_modules/*
-# Except the following:
-!node_modules/brain/
-
+node_modules
 jspm_packages
 
 # Optional npm cache directory

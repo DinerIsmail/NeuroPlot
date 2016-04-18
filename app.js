@@ -1,4 +1,4 @@
-var brain = require('brain');
+var brain = require('./lib/brain/lib/brain');
 var datamanager = require('./src/utils/datamanager');
 
 var net = new brain.NeuralNetwork({
