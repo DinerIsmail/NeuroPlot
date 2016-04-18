@@ -77,6 +77,12 @@ app.get('/assets/lineicons/style.css', function(req, res) {
 app.get('/assets/js/chart-master/Chart.js', function(req, res) {
   res.sendFile(__dirname + '/public/assets/js/chart-master/Chart.js');
 });
+app.get('/assets/font-awesome/fonts/fontawesome-webfont.ttf', function(req, res) {
+  res.sendFile(__dirname + '/public/assets/font-awesome/fonts/fontawesome-webfont.ttf');
+});
+app.get('/assets/font-awesome/fonts/fontawesome-webfont.woff', function(req, res) {
+  res.sendFile(__dirname + '/public/assets/font-awesome/fonts/fontawesome-webfont.woff');
+});
 
 io.sockets.on('connection', function(socket) {
   socket.on('refresh-graph', function(nnParameters) {
