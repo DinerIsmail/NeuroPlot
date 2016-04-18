@@ -117,11 +117,20 @@ function draw() {
           .style('left', (d3.event.pageX - 35) + 'px')
           .style('top', (d3.event.pageY) + 'px')
 
+        // tempColor = this.style.stroke;
+        // d3.select(this)
+        //   .transition().delay(100).duration(200)
+        //   .style('stroke', '#C61C6F')
+        //   .style('opacity', 1)
 
       }).on('mouseout', function(d) {
         tooltip.transition().duration(100)
           .style('opacity', 0)
 
+        // d3.select(this)
+        //   .transition().delay(100).duration(200)
+        //   .style('stroke', tempColor)
+        //   .style('opacity', 1)
       });
     });
   }
