@@ -11,6 +11,7 @@ var height = 600,
     nodeRadius = 30;
 var outerPad = 0.1,
     pad = 0;
+var tempColor;
 
 var nnData = nnDataTest;
 var layerCount = 0;
@@ -33,12 +34,18 @@ var lineFunction = d3.svg.line()
 var strokeWidthFunction = function(weight, minWeight, maxWeight) {
   return d3.scale.linear()
               .domain([minWeight, maxWeight])
-              .range([2, 8]);
+              .range([4, 10]);
 }
 
 var svg = d3.select(".neuralnetwork")
     .attr("width", width)
     .attr("height", height);
+
+var tooltip = d3.select('body').append('div')
+        .style('position', 'absolute')
+        .style('padding', '0 10px')
+        .style('background', 'white')
+        .style('opacity', 0)
 
 function draw() {
   clear();
@@ -93,15 +100,33 @@ function draw() {
       var lineData = [{x: connection.x1, y: connection.y1},
                       {x: connection.x2, y: connection.y2}];
 
-      drawingLayer1.append("path").classed("connection", true)
+      var path = drawingLayer1.append("path").classed("connection", true)
               .attr("stroke", function() { return connection.weight >= 0 ? "#3FBF7F" : "#D54848"; })
               .attr("stroke-width", function(d, i) {
                 return strokeWidthFunction(connection.weight, minWeight, maxWeight)(connection.weight);
               })
               .attr("fill", "none")
               .attr("d", lineFunction(lineData));
+
+      path.on('mouseover', function(d) {
+        var connectionWeight = Math.round(connection.weight * 1000) / 1000;
+
+        tooltip.transition().duration(100)
+          .style('opacity', .9)
+        tooltip.html(connectionWeight)
+          .style('left', (d3.event.pageX - 35) + 'px')
+          .style('top', (d3.event.pageY) + 'px')
+
+
+      }).on('mouseout', function(d) {
+        tooltip.transition().duration(100)
+          .style('opacity', 0)
+
+      });
     });
   }
+
+
 }
 
 function clear() {
@@ -144,7 +169,7 @@ $(document).ready(function() {
     var layerSizeDiv = $("<div>").addClass('layer'+layerCount);
     var removeLayerButton = $("<button>").addClass("remove-layer").attr("style", "display: inline").appendTo(layerSizeDiv);
     var removeLayerIcon = $("<i>").addClass("fa fa-minus").attr("aria-hidden", "true").appendTo(removeLayerButton);
-    var input = $("<input>").addClass("layer-size-input").attr("type", "number").attr("value",'1').attr("style", "display: inline").appendTo(layerSizeDiv);
+    var input = $("<input>").addClass("layer-size-input").attr("type", "number").attr("value",'1').attr("min", "0").attr("step", "1").attr("style", "display: inline").appendTo(layerSizeDiv);
     hiddenLayerSizesArea.append(layerSizeDiv);
 
     removeLayerButton.click(function() {
