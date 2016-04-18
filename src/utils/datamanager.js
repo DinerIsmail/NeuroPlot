@@ -1,5 +1,5 @@
 var fs = require('fs');
-var $ = jQuery = require('jQuery');
+var $ = jQuery = require('jquery');
 require('../../lib/jquery.csv.js');
 
 var csv = require('fast-csv');
