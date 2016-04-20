@@ -10,31 +10,19 @@
     <!--external css-->
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
-    <link rel="stylesheet" href="https://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.oesmith.co.uk/morris-0.4.3.min.css"> -->
 
     <!-- Custom styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
+    <link href="assets/css/editablegrid.css" rel="stylesheet">
 
-    <script src="assets/js/chart-master/Chart.js"></script>
+    <!-- <script src="assets/js/chart-master/Chart.js"></script> -->
 
     <style>
       .container {
         position: relative;
       }
-
-      /*.tooltip {
-        position: absolute;
-        text-align: center;
-        width: 60px;
-        height: 28px;
-        padding: 2px;
-        font: 12px sans-serif;
-        background: lightsteelblue;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-      }*/
     </style>
   </head>
 
@@ -69,7 +57,17 @@
                     <button class="add-hidden-layer">
                       <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
-                    <input class="btn btn-primary" type="submit" value="Start Training" form="refresh-graph"></input>
+                    <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-graph"></input>
+
+                    <div id="inputdataarea">
+
+                      <label><span>Number of input data</span><input type="number" class="inputvaluescount" min="1" max="30" value="2" step="1" /></label>
+                      <div id="inputdatatable"></div>
+                      <button class="add-input-data-row">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </button>
+                      <input type="button" class="btn btn-secondary" value="Feed New Data" name="feed-custom-data"></input>
+                    </div>
                   </li>
 
               </ul>
@@ -145,13 +143,19 @@
     <script type="text/javascript" src="../lib/d3.min.js"></script>
     <script type="text/javascript" src="../socket.io/socket.io.js"></script>
     <script type="text/javascript" src="nn-visualisation.js"></script>
+    <script type="text/javascript" src="../lib/editablegrid/editablegrid.js"></script>
+    <script type="text/javascript" src="../lib/editablegrid/editablegrid_renderers.js"></script>
+    <script type="text/javascript" src="../lib/editablegrid/editablegrid_editors.js"></script>
+    <script type="text/javascript" src="../lib/editablegrid/editablegrid_validators.js"></script>
+    <script type="text/javascript" src="../lib/editablegrid/editablegrid_utils.js"></script>
+    <script type="text/javascript" src="inputdata-editablegrid.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <!-- <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script> -->
 
     <!--common script for all pages-->
     <script src="assets/js/common-scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="https://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script> -->
+    <!-- <script src="https://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script> -->
 
     <!-- <script src="assets/js/examplecharts-morris.js"></script> -->
 

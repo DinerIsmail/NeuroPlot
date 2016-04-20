@@ -1,9 +1,13 @@
-// Augmenting the Array prototype with max and min functions
+// Augmenting the Array prototype with max, min and insert functions
 Array.prototype.max = function() {
   return Math.max.apply(null, this);
 };
 Array.prototype.min = function() {
   return Math.min.apply(null, this);
+};
+Array.prototype.insert = function(index, item) {
+  this.splice(index, 0, item);
+  return this;
 };
 
 var height = 600,
@@ -13,16 +17,16 @@ var outerPad = 0.1,
     pad = 0;
 var tempColor;
 
-var nnData = nnDataTest;
+var nnSpec = nnDataTest;
 var layerCount = 0;
 
 var xPos = d3.scale.linear()
-                .domain([0, nnData.layers.length])
+                .domain([0, nnSpec.layers.length])
                 .range([50, width-50]);
 
 var yPos = function(layerId) {
   return d3.scale.ordinal()
-              .domain(d3.range(0, nnData.layers[layerId].size))
+              .domain(d3.range(0, nnSpec.layers[layerId].size))
               .rangeBands([0, height]);
 }
 
@@ -34,7 +38,7 @@ var lineFunction = d3.svg.line()
 var strokeWidthFunction = function(weight, minWeight, maxWeight) {
   return d3.scale.linear()
               .domain([minWeight, maxWeight])
-              .range([4, 10]);
+              .range([2, 8]);
 }
 
 var svg = d3.select(".neuralnetwork")
@@ -54,7 +58,7 @@ function draw() {
   var drawingLayer1 = svg.append('g');
   var drawingLayer2 = svg.append('g');
 
-  var layers = nnData.layers;
+  var layers = nnSpec.layers;
   layers.forEach(function(layer, layerId) {
 
     var layerNodes = [];
@@ -65,7 +69,7 @@ function draw() {
         for (var j = 0; j < Object.keys(layer[i].weights).length; j++) {
           var connection = {
             "x1": xPos(layerId-1),
-            "y1": yPos(layerId-1)(j) + height/(nnData.layers[layerId-1].size)/2,
+            "y1": yPos(layerId-1)(j) + height/(nnSpec.layers[layerId-1].size)/2,
             "x2": xPos(layerId),
             "y2": yPos(layerId)(i) + height/layer.size/2,
             "weight": layer[i].weights[j]
@@ -103,7 +107,7 @@ function draw() {
       var path = drawingLayer1.append("path").classed("connection", true)
               .attr("stroke", function() { return connection.weight >= 0 ? "#3FBF7F" : "#D54848"; })
               .attr("stroke-width", function(d, i) {
-                return strokeWidthFunction(connection.weight, minWeight, maxWeight)(connection.weight);
+                return strokeWidthFunction(Math.abs(connection.weight), minWeight, maxWeight)(Math.abs(connection.weight));
               })
               .attr("fill", "none")
               .attr("d", lineFunction(lineData));
@@ -134,8 +138,6 @@ function draw() {
       });
     });
   }
-
-
 }
 
 function clear() {
@@ -144,7 +146,7 @@ function clear() {
 
 draw();
 
-// -------------- Socket.IO --------------------------------
+
 
 $(document).ready(function() {
   var socket = io();
@@ -155,6 +157,7 @@ $(document).ready(function() {
   var addLayerButton = $(".add-hidden-layer");
   var hiddenLayerSizesArea = $(".hidden-layers-sizes-area");
   var layerCountLabel = $(".layer-count");
+  var feedCustomDataButton = $("[name='feed-custom-data']");
   var parameters = {};
 
   refreshForm.submit(function(e) {
@@ -167,7 +170,7 @@ $(document).ready(function() {
   });
 
   socket.on('refresh-graph', function(nnJSON) {
-    nnData = nnJSON;
+    nnSpec = nnJSON;
     draw();
   });
 
@@ -186,6 +189,10 @@ $(document).ready(function() {
       layerCount--;
       layerCountLabel.text(layerCount);
     });
+  });
+
+  feedCustomDataButton.click(function() {
+    parameters.customData = editableGrid.getFormattedData();
   });
 });
 

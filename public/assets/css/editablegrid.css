@@ -1,0 +1,35 @@
+#inputdataarea {
+  margin-top: 50px;
+}
+#inputdatatable {
+  white-space: nowrap;
+  overflow-y: hidden;
+}
+#inputdatatable.showscrollbar {
+  overflow-x: scroll;
+}
+#inputdatatable.hidescrollbar {
+  overflow-x: hidden;
+}
+
+#inputdatatable h1 {
+    font-size: 15px;
+}
+#inputdatatable table.inputdatagrid {
+    border-collapse: collapse;
+    border: 1px solid #CCB;
+    background: #fff;
+}
+#inputdatatable table.inputdatagrid td, table.inputdatagrid th {
+    padding: 5px;
+    border: 1px solid #E0E0E0;
+    text-align: center;
+}
+#inputdatatable table.inputdatagrid th {
+    background: #E5E5E5;
+
+}
+#inputdatatable input.invalid {
+    background: red;
+    color: #FDFDFD;
+}

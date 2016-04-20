@@ -6,27 +6,36 @@ function runNN(callback, parameters) {
       hiddenLayers: parameters.layerSizes || []
   });
 
-  datamanager.getTrainingData(function(unParsedData) {
-      var data = datamanager.parseDataForNN(unParsedData);
-      data = [{input: [0, 0], output: [0]},
-          {input: [0, 1], output: [1]},
-          {input: [1, 0], output: [1]},
-          {input: [1, 1], output: [0]}];
+  if (parameters.customData) {
+    runNeuralNetworkWithData(paramers.customData);
+  } else {
+    datamanager.getTrainingData(function(unParsedData) {
+        var data = datamanager.parseDataForNN(unParsedData);
+        data = [{input: [0, 0], output: [0]},
+                {input: [0, 1], output: [1]},
+                {input: [1, 0], output: [1]},
+                {input: [1, 1], output: [0]}];
 
-      net.train(data, {
-                  errorThresh: parameters.errorThreshold || 0.005,
-                  iterations: parameters.iterations || 10000,
-                  log: false,
-                  logPeriod: 10,
-                  learningRate: parameters.learningRate || 0.3
-          });
+        runNeuralNetworkWithData(data);
+    });
+  }
 
-      var output = net.run([1, 0]);
-      console.log(output);
+  function runNeuralNetworkWithData(trainingData) {
+    var trainingInfo = net.train(trainingData, {
+                errorThresh: parameters.errorThreshold || 0.005,
+                iterations: parameters.iterations || 10000,
+                log: false,
+                logPeriod: 10,
+                learningRate: parameters.learningRate || 0.03
+        });
 
-      var jsonString = net.toJSON();
-      if (callback) callback(jsonString);
-  });
+    var output = net.run([1, 0]);
+    console.log(output);
+    console.log(trainingInfo);
+
+    var jsonString = net.toJSON();
+    if (callback) callback(jsonString);
+  }
 }
 
 // --------------- Socket.IO --------------------------
@@ -46,6 +55,36 @@ app.get('/lib/d3.min.js', function(req, res) {
 app.get('/nn-visualisation.js', function(req, res) {
   res.sendFile(__dirname + '/public/nn-visualisation.js');
 });
+
+// EditableGrid
+app.get('/inputdata-editablegrid.js', function(req, res) {
+  res.sendFile(__dirname + '/public/inputdata-editablegrid.js');
+});
+app.get('/lib/editablegrid/editablegrid.js', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/editablegrid.js');
+});
+app.get('/lib/editablegrid/editablegrid_renderers.js', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/editablegrid_renderers.js');
+});
+app.get('/lib/editablegrid/editablegrid_editors.js', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/editablegrid_editors.js');
+});
+app.get('/lib/editablegrid/editablegrid_validators.js', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/editablegrid_validators.js');
+});
+app.get('/lib/editablegrid/editablegrid_utils.js', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/editablegrid_utils.js');
+});
+app.get('/lib/editablegrid/images/bullet_arrow_down.png', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/images/bullet_arrow_down.png');
+});
+app.get('/lib/editablegrid/images/bullet_arrow_up.png', function(req, res) {
+  res.sendFile(__dirname + '/lib/editablegrid/images/bullet_arrow_up.png');
+});
+app.get('/assets/css/editablegrid.css', function(req, res) {
+  res.sendFile(__dirname + '/public/assets/css/editablegrid.css');
+});
+
 app.get('/data/neuralnetwork.json', function(req, res) {
   res.sendFile(__dirname + '/data/neuralnetwork.json');
 });
