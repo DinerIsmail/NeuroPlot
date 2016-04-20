@@ -18,7 +18,7 @@ var outerPad = 0.1,
 var tempColor;
 
 var nnSpec = nnDataTest;
-var layerCount = 0;
+var layerCount = $('.hidden-layers-sizes-area div').length;
 
 var xPos = d3.scale.linear()
                 .domain([0, nnSpec.layers.length])
@@ -185,11 +185,19 @@ $(document).ready(function() {
     hiddenLayerSizesArea.append(layerSizeDiv);
 
     removeLayerButton.click(function() {
-      $("div."+this.parentNode.className).remove();
-      layerCount--;
-      layerCountLabel.text(layerCount);
+      removeLayerDiv(this);
     });
   });
+
+  $('.remove-layer').click(function() {
+    removeLayerDiv(this);
+  });
+
+  function removeLayerDiv(theLayerObj) {
+    $("div."+theLayerObj.parentNode.className).remove();
+    layerCount--;
+    layerCountLabel.text(layerCount);
+  }
 
   feedCustomDataButton.click(function() {
     parameters.customData = editableGrid.getFormattedData();
