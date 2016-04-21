@@ -1,8 +1,6 @@
 var Script = function () {
 
-
     //checkbox and radio btn
-
     var d = document;
     var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
     var gebtn = function(parEl,child) { return parEl.getElementsByTagName(child); };

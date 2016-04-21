@@ -164,7 +164,11 @@ $(document).ready(function() {
   });
 
   socket.on('refresh-graphs', function(trainingStats) {
-    drawGraphs(trainingStats);
+    drawErrorGraph(trainingStats);
+  });
+
+  socket.on('refresh-vis-live', function(trainingStatsLive) {
+    console.log("Working");
   });
 
   addLayerButton.click(function() {

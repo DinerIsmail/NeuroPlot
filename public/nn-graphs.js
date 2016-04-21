@@ -3,16 +3,13 @@
   how the neural network is performing
 */
 
-function drawGraphs(trainingStats) {
+function drawErrorGraph(trainingStats) {
   // If there's no training info to process, don't show anything
   if (trainingStats.length == 0 || trainingStats.data.length == 0) return;
 
   var errorsArray = trainingStats.data.map(function(singleStat) { return singleStat.error });
 
   $("#error-viz-container").highcharts({
-    // chart: {
-    //   type: 'areaspline'
-    // },
     title: {
       text: "Global Error"
     },
@@ -20,8 +17,8 @@ function drawGraphs(trainingStats) {
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
-            x: 150,
-            y: 100,
+            x: 270,
+            y: 50,
             floating: true,
             borderWidth: 1,
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
@@ -36,6 +33,15 @@ function drawGraphs(trainingStats) {
       title: {
         text: "Error"
       },
+      plotLines: [{
+        color: 'black',
+        width: 2,
+        value: 0.005,
+        dashStyle: 'longdash',
+        label: {
+          text: "Error Threshold"
+        }
+      }],
       min: 0
     },
     plotOptions: {
@@ -46,9 +52,6 @@ function drawGraphs(trainingStats) {
     series: [{
       name: 'Training Error',
       data: errorsArray
-    },{
-      name: 'Threshold',
-      data: []
     }]
   })
 }
