@@ -35,7 +35,8 @@ function drawGraphs(trainingStats) {
     yAxis: {
       title: {
         text: "Error"
-      }
+      },
+      min: 0
     },
     plotOptions: {
       areaspline: {
@@ -45,6 +46,9 @@ function drawGraphs(trainingStats) {
     series: [{
       name: 'Training Error',
       data: errorsArray
+    },{
+      name: 'Threshold',
+      data: []
     }]
   })
 }

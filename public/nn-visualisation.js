@@ -154,9 +154,7 @@ function clear() {
   $(".neuralnetwork").empty();
 }
 
-draw();
-
-
+//draw();
 
 $(document).ready(function() {
   var socket = io();
@@ -219,9 +217,8 @@ $(document).ready(function() {
     layerCountLabel.text(layerCount);
   }
 
-  // feedCustomDataButton.click(function() {
-  //   parameters.customData = editableGrid.getFormattedData();
-  // });
+  // Refresh the nn viz on refresh
+  $("#refresh-viz").submit();
 });
 
 function getHiddenLayerSizes() {
