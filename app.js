@@ -40,7 +40,6 @@ function runNN(callback, parameters) {
 
     var output = net.run([1, 0]);
     console.log(output);
-    //console.log(trainingStats);
 
     var jsonString = net.toJSON();
     if (callback) callback(jsonString, trainingStats);
@@ -87,12 +86,6 @@ app.get('/lib/editablegrid/editablegrid_validators.js', function(req, res) {
 app.get('/lib/editablegrid/editablegrid_utils.js', function(req, res) {
   res.sendFile(__dirname + '/lib/editablegrid/editablegrid_utils.js');
 });
-app.get('/lib/editablegrid/images/bullet_arrow_down.png', function(req, res) {
-  res.sendFile(__dirname + '/lib/editablegrid/images/bullet_arrow_down.png');
-});
-app.get('/lib/editablegrid/images/bullet_arrow_up.png', function(req, res) {
-  res.sendFile(__dirname + '/lib/editablegrid/images/bullet_arrow_up.png');
-});
 app.get('/assets/css/editablegrid.css', function(req, res) {
   res.sendFile(__dirname + '/public/assets/css/editablegrid.css');
 });
@@ -118,16 +111,8 @@ app.get('/assets/font-awesome/css/font-awesome.css', function(req, res) {
 app.get('/assets/js/common-scripts.js', function(req, res) {
   res.sendFile(__dirname + '/public/assets/js/common-scripts.js');
 });
-app.get('/assets/js/jquery.dcjqaccordion.2.7.js', function(req, res) {
-  res.sendFile(__dirname + '/public/assets/js/jquery.dcjqaccordion.2.7.js');
-});
-app.get('/assets/lineicons/style.css', function(req, res) {
-  res.sendFile(__dirname + '/public/assets/lineicons/style.css');
-});
+
 // Extra
-app.get('/assets/js/chart-master/Chart.js', function(req, res) {
-  res.sendFile(__dirname + '/public/assets/js/chart-master/Chart.js');
-});
 app.get('/assets/font-awesome/fonts/fontawesome-webfont.ttf', function(req, res) {
   res.sendFile(__dirname + '/public/assets/font-awesome/fonts/fontawesome-webfont.ttf');
 });

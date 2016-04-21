@@ -11,7 +11,7 @@ Array.prototype.insert = function(index, item) {
 };
 
 var height = 600,
-    width = 1000,
+    width = 1400,
     nodeRadius = 30;
 var outerPad = 0.1,
     pad = 0;
@@ -91,18 +91,6 @@ function draw() {
       .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
       .attr("cx", function(d) { return xPos(layerId) })
       .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
-
-    //if (layerId == 0) {
-    //  for (var i = 0; i < layer.size; i++) {
-        // node.append('text')
-        //   .text(function(d) { return "test" })
-        //   .attr('font-family', 'Ruda')
-        //   .attr('fill', "green")
-        //   .attr('text-anchor', 'beginning')
-        //   .attr('font-size', '1.2em')
-        //   .attr('dx', function(d) { return -20 })
-    //  }
-    //}
   });
 
   if (nnConnections.length > 0) {
@@ -131,20 +119,9 @@ function draw() {
           .style('left', (d3.event.pageX - 35) + 'px')
           .style('top', (d3.event.pageY) + 'px')
 
-        // tempColor = this.style.stroke;
-        // d3.select(this)
-        //   .transition().delay(100).duration(200)
-        //   .style('stroke', '#C61C6F')
-        //   .style('opacity', 1)
-
       }).on('mouseout', function(d) {
         tooltip.transition().duration(100)
           .style('opacity', 0)
-
-        // d3.select(this)
-        //   .transition().delay(100).duration(200)
-        //   .style('stroke', tempColor)
-        //   .style('opacity', 1)
       });
     });
   }
@@ -153,8 +130,6 @@ function draw() {
 function clear() {
   $(".neuralnetwork").empty();
 }
-
-//draw();
 
 $(document).ready(function() {
   var socket = io();
@@ -199,7 +174,7 @@ $(document).ready(function() {
     var layerSizeDiv = $("<div>").addClass('layer'+layerCount);
     var removeLayerButton = $("<button>").addClass("remove-layer").attr("style", "display: inline").appendTo(layerSizeDiv);
     var removeLayerIcon = $("<i>").addClass("fa fa-minus").attr("aria-hidden", "true").appendTo(removeLayerButton);
-    var input = $("<input>").addClass("layer-size-input").attr("type", "number").attr("value",'1').attr("min", "0").attr("step", "1").attr("style", "display: inline").appendTo(layerSizeDiv);
+    var input = $("<input>").addClass("layer-size-input").attr("type", "number").attr("value",'1').attr("min", "1").attr("step", "1").attr("style", "display: inline").appendTo(layerSizeDiv);
     hiddenLayerSizesArea.append(layerSizeDiv);
 
     removeLayerButton.click(function() {

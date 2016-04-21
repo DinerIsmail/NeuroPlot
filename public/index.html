@@ -7,18 +7,12 @@
     <title>NeuroPlot - Dashboard</title>
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
-    <!--external css-->
+    <!-- External CSS-->
     <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/lineicons/style.css">
-    <!-- <link rel="stylesheet" href="https://cdn.oesmith.co.uk/morris-0.4.3.min.css"> -->
-
-    <!-- Custom styles for this template -->
+    <link href="assets/css/editablegrid.css" rel="stylesheet">
+    <!-- Styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
-    <link href="assets/css/editablegrid.css" rel="stylesheet">
-
-    <!-- <script src="assets/js/chart-master/Chart.js"></script> -->
-
     <style>
       .container {
         position: relative;
@@ -40,8 +34,6 @@
       <aside>
           <div id="sidebar">
               <ul class="sidebar-menu">
-              	  <!-- <p class="centered"><a href="profile.html"><img src="assets/img/brain.png" class="img-circle" width="120"></a></p> -->
-              	  <!-- <h3 class="centered">NeuroPlot</h3> -->
                   <li class="mt">
                     <form id="refresh-viz">
                       <label><span>Learning Rate </span><input type="number" name="learning-rate" min="0.00" max="0.99" step="0.01" value="0.3" /></label><br />
@@ -55,14 +47,8 @@
                         <button class="remove-layer" style="display: inline">
                           <i class="fa fa-minus" aria-hidden="true"></i>
                         </button>
-                        <input class="layer-size-input" type="number" value="4" min="0" step="1" style="display: inline" />
+                        <input class="layer-size-input" type="number" value="4" min="1" step="1" style="display: inline" />
                       </div>
-                      <!-- <div class="layer2">
-                        <button class="remove-layer" style="display: inline">
-                          <i class="fa fa-minus" aria-hidden="true"></i>
-                        </button>
-                        <input class="layer-size-input" type="number" value="5" min="0" step="1" style="display: inline" />
-                      </div> -->
                     </div>
                     <button class="add-hidden-layer">
                       <i class="fa fa-plus" aria-hidden="true"></i>
@@ -91,33 +77,16 @@
 
                     <div class="row mt">
                       <div class="col-md-8 col-sm-8 mb">
-                        <div class="col-md-3 col-sm-8 mb">
-                          <!-- <label class="pull-left">Activation Function </label>
-                          <select id="select-activation-function" class="form-control">
-              						  <option>Sigmoid</option>
-              						  <option>Hyperbolic Tangent</option>
-              						  <option>Step Function</option>
-              						</select> -->
-                        </div>
-                        <!-- <button type="button" class="btn btn-primary pull-right">Start Simulation</button> -->
-
                         <div class="container">
                           <svg class="neuralnetwork"></svg>
                         </div>
                       </div>
-                      <div class="col-md-4 col-sm-4 mb">
+                      <div class="col-md-4 col-sm-4">
                         <div class="content-panel">
-                            <!-- <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4> -->
                             <div class="panel-body">
                               <div id="error-viz-container">
 
                               </div>
-                            </div>
-                        </div>
-                        <div class="content-panel">
-                            <!-- <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4> -->
-                            <div class="panel-body">
-                                <div id="hero-bar" class="graph"></div>
                             </div>
                         </div>
                       </div>
@@ -148,7 +117,6 @@
       </footer> -->
   </section>
 
-    <!-- <script src="assets/js/jquery.js"></script> -->
     <script src='https://code.jquery.com/jquery-2.2.3.min.js'></script>
     <script type="text/javascript" src="../data/neuralnetwork.json"></script>
     <script type="text/javascript" src="../lib/d3.min.js"></script>
