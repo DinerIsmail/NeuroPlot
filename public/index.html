@@ -43,11 +43,11 @@
               	  <!-- <p class="centered"><a href="profile.html"><img src="assets/img/brain.png" class="img-circle" width="120"></a></p> -->
               	  <!-- <h3 class="centered">NeuroPlot</h3> -->
                   <li class="mt">
-                    <form id="refresh-graph">
+                    <form id="refresh-viz">
                       <label><span>Learning Rate </span><input type="number" name="learning-rate" min="0.00" max="0.99" step="0.01" value="0.3" /></label><br />
                       <label><span>Error Threshold </span><input type="number" name="error-threshold" min="0.001" max="0.1" step="0.001" value="0.005" /></label><br />
-                      <label><span>Iterations </span><input type="number" name="iterations" min="1" max="100000" step="1" value="1000" /></label><br />
-                      <label><span>Hidden Layers:</span> <span class="layer-count">2</span></label><br />
+                      <label><span>Iterations </span><input type="number" name="iterations" min="1" max="100000" step="1" value="10000" /></label><br />
+                      <label><span>Hidden Layers:</span> <span class="layer-count">1</span></label><br />
 
                     </form>
                     <div class="hidden-layers-sizes-area">
@@ -57,26 +57,26 @@
                         </button>
                         <input class="layer-size-input" type="number" value="3" min="0" step="1" style="display: inline" />
                       </div>
-                      <div class="layer2">
+                      <!-- <div class="layer2">
                         <button class="remove-layer" style="display: inline">
                           <i class="fa fa-minus" aria-hidden="true"></i>
                         </button>
                         <input class="layer-size-input" type="number" value="5" min="0" step="1" style="display: inline" />
-                      </div>
+                      </div> -->
                     </div>
                     <button class="add-hidden-layer">
                       <i class="fa fa-plus" aria-hidden="true"></i>
                     </button>
-                    <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-graph"></input>
+                    <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-viz"></input>
 
                     <div id="inputdataarea">
-
+                      <label><input type="checkbox" value="" name="use-custom-data" style="width: 20px; display: inline" /><span>Use Custom Data</span></label>
                       <label><span>Number of input dimensions</span><input type="number" class="inputvaluescount" min="1" max="30" value="2" step="1" /></label>
                       <div id="inputdatatable"></div>
                       <button class="add-input-data-row">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                       </button>
-                      <input type="button" class="btn btn-secondary" value="Feed New Data" name="feed-custom-data"></input>
+                      <!-- <input type="button" class="btn btn-secondary" value="Feed New Data" name="feed-custom-data"></input> -->
                     </div>
                   </li>
 
@@ -108,9 +108,11 @@
                       </div>
                       <div class="col-md-4 col-sm-4 mb">
                         <div class="content-panel">
-                            <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4>
+                            <!-- <h4><i class="fa fa-angle-right"></i> Neural Network Performance</h4> -->
                             <div class="panel-body">
-                              <!-- <div id="hero-area" class="graph"></div> -->
+                              <div id="error-viz-container">
+
+                              </div>
                             </div>
                         </div>
                         <div class="content-panel">
@@ -153,12 +155,15 @@
     <script type="text/javascript" src="../lib/d3.min.js"></script>
     <script type="text/javascript" src="../socket.io/socket.io.js"></script>
     <script type="text/javascript" src="nn-visualisation.js"></script>
+    <script type="text/javascript" src="nn-graphs.js"></script>
     <script type="text/javascript" src="../lib/editablegrid/editablegrid.js"></script>
     <script type="text/javascript" src="../lib/editablegrid/editablegrid_renderers.js"></script>
     <script type="text/javascript" src="../lib/editablegrid/editablegrid_editors.js"></script>
     <script type="text/javascript" src="../lib/editablegrid/editablegrid_validators.js"></script>
     <script type="text/javascript" src="../lib/editablegrid/editablegrid_utils.js"></script>
     <script type="text/javascript" src="inputdata-editablegrid.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <!-- <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script> -->
 

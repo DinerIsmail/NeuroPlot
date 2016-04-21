@@ -1,6 +1,9 @@
 var brain = require('./lib/brain/lib/brain');
 var datamanager = require('./src/utils/datamanager');
 
+// Constants
+var logPeriod = 10;
+
 function runNN(callback, parameters) {
   var net = new brain.NeuralNetwork({
       hiddenLayers: parameters.layerSizes || []
@@ -24,17 +27,23 @@ function runNN(callback, parameters) {
     var trainingInfo = net.train(trainingData, {
                 errorThresh: parameters.errorThreshold || 0.005,
                 iterations: parameters.iterations || 10000,
-                log: false,
-                logPeriod: 10,
+                log: true,
+                logPeriod: logPeriod,
                 learningRate: parameters.learningRate || 0.03
         });
 
+    var trainingStats = {
+      data: trainingInfo,
+      logPeriod: logPeriod,
+      totalIterationsCount: parameters.iterations || 10000
+    }
+
     var output = net.run([1, 0]);
     console.log(output);
-    console.log(trainingInfo);
+    //console.log(trainingStats);
 
     var jsonString = net.toJSON();
-    if (callback) callback(jsonString);
+    if (callback) callback(jsonString, trainingStats);
   }
 }
 
@@ -54,6 +63,9 @@ app.get('/lib/d3.min.js', function(req, res) {
 });
 app.get('/nn-visualisation.js', function(req, res) {
   res.sendFile(__dirname + '/public/nn-visualisation.js');
+});
+app.get('/nn-graphs.js', function(req, res) {
+  res.sendFile(__dirname + '/public/nn-graphs.js');
 });
 
 // EditableGrid
@@ -124,10 +136,15 @@ app.get('/assets/font-awesome/fonts/fontawesome-webfont.woff', function(req, res
 });
 
 io.sockets.on('connection', function(socket) {
-  socket.on('refresh-graph', function(nnParameters) {
-    console.log(nnParameters);
-    runNN(function(nnJSON) {
-      io.sockets.emit('refresh-graph', nnJSON);
+  socket.on('refresh-viz', function(nnParameters) {
+    //console.log(nnParameters);
+    runNN(function(nnJSON, trainingInfo) {
+      io.sockets.emit('refresh-viz', nnJSON);
+      io.sockets.emit('refresh-graphs', trainingInfo);
     }, nnParameters);
   });
+
+  // socket.on('refresh-graphs', function() {
+  //
+  // });
 });

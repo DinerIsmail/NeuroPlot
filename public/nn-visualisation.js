@@ -80,19 +80,29 @@ function draw() {
       }
     }
 
-    drawingLayer2.selectAll("circle.layer"+layerId).data(layerNodes)
-            .enter()
-            .append("circle")
-              .style("fill", "#268BD2")
-              .transition()
-                .each("start", function() { d3.select(this).attr("r", 10) })
-                .attr("r", nodeRadius)
-                .duration(750)
-                .ease('elastic')
-              .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
-              .attr("cx", function(d) { return xPos(layerId) })
-              .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
+    var node = drawingLayer2.selectAll("circle.layer"+layerId).data(layerNodes).enter().append('g');
+    node.append("circle")
+      .style("fill", "#268BD2")
+      .transition()
+        .each("start", function() { d3.select(this).attr("r", 10) })
+        .attr("r", nodeRadius)
+        .duration(750)
+        .ease('elastic')
+      .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
+      .attr("cx", function(d) { return xPos(layerId) })
+      .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
 
+    //if (layerId == 0) {
+    //  for (var i = 0; i < layer.size; i++) {
+        // node.append('text')
+        //   .text(function(d) { return "test" })
+        //   .attr('font-family', 'Ruda')
+        //   .attr('fill', "green")
+        //   .attr('text-anchor', 'beginning')
+        //   .attr('font-size', '1.2em')
+        //   .attr('dx', function(d) { return -20 })
+    //  }
+    //}
   });
 
   if (nnConnections.length > 0) {
@@ -150,7 +160,7 @@ draw();
 
 $(document).ready(function() {
   var socket = io();
-  var refreshForm = $("#refresh-graph");
+  var refreshForm = $("#refresh-viz");
   var learningRateTextBox = $("[name='learning-rate']");
   var errorThresholdTextBox = $("[name='error-threshold']");
   var iterationsTextBox = $("[name='iterations']");
@@ -158,6 +168,7 @@ $(document).ready(function() {
   var hiddenLayerSizesArea = $(".hidden-layers-sizes-area");
   var layerCountLabel = $(".layer-count");
   var feedCustomDataButton = $("[name='feed-custom-data']");
+  var useCustomDataCheckbox = $("[name='use-custom-data']");
   var parameters = {};
 
   refreshForm.submit(function(e) {
@@ -166,12 +177,21 @@ $(document).ready(function() {
     parameters.errorThreshold = errorThresholdTextBox.val();
     parameters.iterations = iterationsTextBox.val();
     parameters.layerSizes = getHiddenLayerSizes();
-    socket.emit('refresh-graph', parameters);
+
+    if (useCustomDataCheckbox.is(":checked")) {
+      parameters.customData = editableGrid.getFormattedData();
+    }
+
+    socket.emit('refresh-viz', parameters);
   });
 
-  socket.on('refresh-graph', function(nnJSON) {
+  socket.on('refresh-viz', function(nnJSON) {
     nnSpec = nnJSON;
     draw();
+  });
+
+  socket.on('refresh-graphs', function(trainingStats) {
+    drawGraphs(trainingStats);
   });
 
   addLayerButton.click(function() {
@@ -199,9 +219,9 @@ $(document).ready(function() {
     layerCountLabel.text(layerCount);
   }
 
-  feedCustomDataButton.click(function() {
-    parameters.customData = editableGrid.getFormattedData();
-  });
+  // feedCustomDataButton.click(function() {
+  //   parameters.customData = editableGrid.getFormattedData();
+  // });
 });
 
 function getHiddenLayerSizes() {
