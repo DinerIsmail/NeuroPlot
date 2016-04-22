@@ -10,7 +10,7 @@ function getIrisDataset(callback) {
 	   if(err) throw err;
 
      var lines = data.split("\n");
-	 var trainingData = [];
+	   var trainingData = [];
 
      for (var i = 0; i < lines.length; i++) {
     		var line = lines[i].trim();
@@ -98,14 +98,14 @@ function parseIrisDataForNN(dataRows) {
 //         output: data.output
 //     };
 //     data = data.slice(1);
-    
+
 //     data.forEach(function(datum) {
-//        parsedDataObject.input.push(datum/7.9) 
+//        parsedDataObject.input.push(datum/7.9)
 //     });
-    
+
 //     return parsedDataObject;
 //   }
-  
+
   return parsedData;
 }
 

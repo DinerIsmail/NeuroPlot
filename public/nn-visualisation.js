@@ -11,7 +11,7 @@ Array.prototype.insert = function(index, item) {
 };
 
 var height = 600,
-    width = 1400,
+    width = 1300,
     nodeRadius = 30;
 var outerPad = 0.1,
     pad = 0;
@@ -143,10 +143,23 @@ $(document).ready(function() {
   var feedCustomDataButton = $("[name='feed-custom-data']");
   var datasetSelect = $("[name='dataset-select']");
   var loadingSpinner = $(".loading-spinner");
+
+  var testDataInput = $(".test-data");
+  var testDataButton = $(".test-data-button");
+
   var parameters = {};
 
   refreshForm.submit(function(e) {
     e.preventDefault();
+
+    refreshParameters();
+
+    loadingSpinner.addClass("visible").removeClass("hidden");
+    socket.emit('refresh-viz', parameters);
+    clearVis();
+  });
+
+  function refreshParameters() {
     parameters.learningRate = learningRateTextBox.val();
     parameters.errorThreshold = errorThresholdTextBox.val();
     parameters.iterations = iterationsTextBox.val();
@@ -156,11 +169,7 @@ $(document).ready(function() {
     if (datasetSelect.val() == "custom") {
       parameters.customData = editableGrid.getFormattedData();
     }
-
-    loadingSpinner.addClass("visible").removeClass("hidden");
-    socket.emit('refresh-viz', parameters);
-    clearVis();
-  });
+  }
 
   socket.on('refresh-viz', function(nnJSON) {
     nnSpec = nnJSON;
@@ -201,8 +210,36 @@ $(document).ready(function() {
     layerCountLabel.text(layerCount);
   }
 
+  testDataButton.click(function() {
+    // This only expects the format to be like: 1,2,3 which it turns into an array and sends it as an input to the ANN
+    if (testDataInput.val() == "") {
+      console.log("The test data field is empty");
+    }
+
+    var inputDataArray = testDataInput.val().split(",");
+
+    refreshParameters();
+
+    socket.emit("test-data", {
+      "testData": inputDataArray,
+      "nnParameters": parameters
+    });
+  });
+
   // Refresh the nn viz on refresh
   $("#refresh-viz").submit();
+
+  datasetSelect.change(function() {
+    switch($(this).val()) {
+      case "xor":
+        testDataInput.val("1,0");
+        break;
+      default:
+        testDataInput.val("");
+        console.log("Dataset type unrecognized!");
+        break;
+    }
+  });
 });
 
 function getHiddenLayerSizes() {

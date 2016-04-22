@@ -13,115 +13,102 @@
     <!-- Styles for this template -->
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/style-responsive.css" rel="stylesheet">
-    <style>
-      .container {
-        position: relative;
-      }
-    </style>
   </head>
 
   <body>
 
   <section id="container" >
       <header class="header black-bg">
-              <div class="sidebar-toggle-box">
-                  <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
-              </div>
-            <a href="index.html" class="logo"><b>NeuroPlot</b></a>
-
-        </header>
+        <div class="sidebar-toggle-box">
+            <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        </div>
+        <a href="index.html" class="logo"><b>NeuroPlot</b></a>
+      </header>
 
       <aside>
-          <div id="sidebar">
-              <ul class="sidebar-menu">
-                  <li class="mt">
-                    <form id="refresh-viz">
-                      <label><span>Learning Rate </span><input type="number" name="learning-rate" min="0.00" max="0.99" step="0.01" value="0.3" /></label><br />
-                      <label><span>Error Threshold </span><input type="number" name="error-threshold" min="0.001" max="0.1" step="0.001" value="0.005" /></label><br />
-                      <label><span>Iterations </span><input type="number" name="iterations" min="1" max="100000" step="1" value="10000" /></label><br />
-                      <label><span>Hidden Layers:</span> <span class="layer-count">1</span></label><br />
+        <div id="sidebar">
+          <ul class="sidebar-menu">
+            <li class="mt">
+              <form id="refresh-viz">
+                <label><span>Learning Rate </span><input type="number" name="learning-rate" min="0.00" max="0.99" step="0.01" value="0.3" /></label><br />
+                <label><span>Error Threshold </span><input type="number" name="error-threshold" min="0.001" max="0.1" step="0.001" value="0.005" /></label><br />
+                <label><span>Iterations </span><input type="number" name="iterations" min="1" max="100000" step="1" value="10000" /></label><br />
+                <label><span>Hidden Layers:</span> <span class="layer-count">1</span></label><br />
 
-                    </form>
-                    <div class="hidden-layers-sizes-area">
-                      <div class="layer1">
-                        <button class="remove-layer" style="display: inline">
-                          <i class="fa fa-minus" aria-hidden="true"></i>
-                        </button>
-                        <input class="layer-size-input" type="number" value="4" min="1" step="1" style="display: inline" />
-                      </div>
-                    </div>
-                    <button class="add-hidden-layer">
-                      <i class="fa fa-plus" aria-hidden="true"></i>
-                    </button>
-                    <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-viz"></input>
+              </form>
+              <div class="hidden-layers-sizes-area">
+                <div class="layer1">
+                  <button class="remove-layer" style="display: inline">
+                    <i class="fa fa-minus" aria-hidden="true"></i>
+                  </button>
+                  <input class="layer-size-input" type="number" value="4" min="1" step="1" style="display: inline" />
+                </div>
+              </div>
+              <button class="add-hidden-layer">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </button>
+              <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-viz"></input>
 
-                    <div id="inputdataarea">
-                      <label><span>Dataset</span>
-                        <select name="dataset-select">
-                          <option value='xor'>XOR Logic Gate</option>
-                          <option value='custom'>Custom Data</option>
-                          <option value='iris'>Iris Dataset</option>
-                        </select>
-                      </label>
-                      <label><span>Number of input dimensions</span><input type="number" class="inputvaluescount" min="1" max="30" value="2" step="1" /></label>
-                      <div id="inputdatatable"></div>
-                      <button class="add-input-data-row">
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  </li>
+              <div id="inputdataarea">
+                <div>
+                  <label><span>Dataset</span>
+                    <select name="dataset-select">
+                      <option value='xor'>XOR Logic Gate</option>
+                      <option value='custom'>Custom Data</option>
+                      <option value='iris'>Iris Dataset</option>
+                    </select>
+                  </label>
 
-              </ul>
-          </div>
+                  <input type="text" class="test-data" style="width: 70px; display: inline" value="1,0" /><button class="test-data-button">Test</button>
+                  <p>Output</p>
+                  
+
+                </div>
+                <div style="margin-top: 50px">
+                  <label><span style="font-size: 17px">Custom Data</span></label>
+                  <label><span>Number of input dimensions</span><input type="number" class="inputvaluescount" min="1" max="30" value="2" step="1" /></label>
+                  <div id="inputdatatable"></div>
+                  <button class="add-input-data-row">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </aside>
 
       <section id="main-content">
           <section class="wrapper">
 
-              <div class="row">
-                  <div class="col-lg-12 main-chart">
+                  <div class="col-lg-7 main-chart">
 
                     <div class="row mt">
-                      <div class="col-md-7 col-sm-7 mb">
                         <div class="container">
                           <img src="assets/img/ajax-loader.gif" class='loading-spinner hidden' />
                           <svg class="neuralnetwork"></svg>
                         </div>
-                      </div>
-                      <div class="col-md-5 col-sm-5">
-                        <div class="content-panel">
-                            <div class="panel-body">
-                              <div id="error-viz-container">
-
-                              </div>
-                            </div>
+                  </div>
+                </div>
+                <div class="col-lg-5">
+                  <div class="row">
+                    <div class="content-panel">
+                        <div class="panel-body">
+                          <div id="error-viz-container"></div>
                         </div>
-                      </div>
-                    </div>
-
-                    <div class="row mt">
-                      <div class="col-md8 col-sm-8 mb">
-
-                      </div>
-
-                      <div class="col-md-4 col-sm-4 mb">
-
-                      </div>
                     </div>
                   </div>
+                  <div class="row mt">
+                    <div class="content-panel">
+                        <div class="panel-body">
+                          <p>Under construction...</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
 
-              </div>
           </section>
       </section>
-
-      <!-- <footer class="site-footer">
-          <div class="text-center">
-              2016
-              <a href="index.html#" class="go-top">
-                  <i class="fa fa-angle-up"></i>
-              </a>
-          </div>
-      </footer> -->
   </section>
 
     <script src='https://code.jquery.com/jquery-2.2.3.min.js'></script>

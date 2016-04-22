@@ -746,6 +746,10 @@ ul.sidebar-menu li input {
   width: 120px;
 }
 
+.sidebar-menu p {
+  color: #fff;
+}
+
 .loading-spinner {
   position: relative;
   left: 25%;
@@ -756,4 +760,8 @@ ul.sidebar-menu li input {
 }
 .loading-spinner.hidden {
   display: none;
+}
+
+.container {
+  position: relative;
 }

@@ -7,7 +7,7 @@ function drawErrorGraph(trainingStats) {
   // If there's no training info to process, don't show anything
   if (trainingStats.length == 0 || trainingStats.data.length == 0) return;
 
-  var errorsArray = trainingStats.data.map(function(singleStat) { return singleStat.error });
+  var errorsArray = trainingStats.data.map(function(singleStat) { return Math.round(singleStat.error * 1000)/1000 });
 
   $("#error-viz-container").highcharts({
     title: {
