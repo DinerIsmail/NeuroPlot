@@ -57,6 +57,9 @@ module.exports = function(app) {
   app.get('/assets/js/common-scripts.js', function(req, res) {
     res.sendFile(__dirname + '/public/assets/js/common-scripts.js');
   });
+  app.get('/assets/img/ajax-loader.gif', function(req, res) {
+    res.sendFile(__dirname + '/public/assets/img/ajax-loader.gif');
+  });
 
   // Extra
   app.get('/assets/font-awesome/fonts/fontawesome-webfont.ttf', function(req, res) {
@@ -65,5 +68,5 @@ module.exports = function(app) {
   app.get('/assets/font-awesome/fonts/fontawesome-webfont.woff', function(req, res) {
     res.sendFile(__dirname + '/public/assets/font-awesome/fonts/fontawesome-webfont.woff');
   });
-  
+
 }

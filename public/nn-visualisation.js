@@ -52,7 +52,6 @@ var tooltip = d3.select('body').append('div')
         .style('opacity', 0)
 
 function draw() {
-  clear();
   var nnConnections = [];
 
   var drawingLayer1 = svg.append('g');
@@ -127,12 +126,13 @@ function draw() {
   }
 }
 
-function clear() {
+function clearVis() {
   $(".neuralnetwork").empty();
 }
 
 $(document).ready(function() {
   var socket = io();
+
   var refreshForm = $("#refresh-viz");
   var learningRateTextBox = $("[name='learning-rate']");
   var errorThresholdTextBox = $("[name='error-threshold']");
@@ -141,7 +141,8 @@ $(document).ready(function() {
   var hiddenLayerSizesArea = $(".hidden-layers-sizes-area");
   var layerCountLabel = $(".layer-count");
   var feedCustomDataButton = $("[name='feed-custom-data']");
-  var useCustomDataCheckbox = $("[name='use-custom-data']");
+  var datasetSelect = $("[name='dataset-select']");
+  var loadingSpinner = $(".loading-spinner");
   var parameters = {};
 
   refreshForm.submit(function(e) {
@@ -150,17 +151,21 @@ $(document).ready(function() {
     parameters.errorThreshold = errorThresholdTextBox.val();
     parameters.iterations = iterationsTextBox.val();
     parameters.layerSizes = getHiddenLayerSizes();
+    parameters.dataset = datasetSelect.val();
 
-    if (useCustomDataCheckbox.is(":checked")) {
+    if (datasetSelect.val() == "custom") {
       parameters.customData = editableGrid.getFormattedData();
     }
 
+    loadingSpinner.addClass("visible").removeClass("hidden");
     socket.emit('refresh-viz', parameters);
+    clearVis();
   });
 
   socket.on('refresh-viz', function(nnJSON) {
     nnSpec = nnJSON;
     draw();
+    loadingSpinner.addClass("hidden").removeClass("visible");
   });
 
   socket.on('refresh-graphs', function(trainingStats) {

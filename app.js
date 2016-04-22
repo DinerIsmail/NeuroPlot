@@ -9,45 +9,58 @@ function runNN(callback, parameters) {
       hiddenLayers: parameters.layerSizes || []
   });
 
-  if (parameters.customData) {
-    runNeuralNetworkWithData(paramers.customData);
-  } else {
-    datamanager.getIrisDataset(function(data) {
-      //console.log(data);
-      // data = [{input: [0, 0], output: [0]},
-      //         {input: [0, 1], output: [1]},
-      //         {input: [1, 0], output: [1]},
-      //         {input: [1, 1], output: [0]}];
+  switch (parameters.dataset) {
+    case "custom":
+      if (parameters.customData) {
+        runNeuralNetworkWithData(net, parameters.customData, parameters, callback);
+      } else {
+        console.log("parameters.customData is empty!");
+      }
+      break;
+    case "xor":
+      data = [{input: [0, 0], output: [0]},
+              {input: [0, 1], output: [1]},
+              {input: [1, 0], output: [1]},
+              {input: [1, 1], output: [0]}];
 
-      runNeuralNetworkWithData(data);
-    });
-  }
-
-  function runNeuralNetworkWithData(trainingData) {
-    console.log("Starting training...")
-    var trainingInfo = net.train(trainingData, {
-                errorThresh: parameters.errorThreshold || 0.005,
-                iterations: parameters.iterations || 10000,
-                log: true,
-                logPeriod: logPeriod,
-                refreshVisWhenLogging: true,
-                learningRate: parameters.learningRate || 0.1
-        });
-    console.log("Training finished!");
-
-    var trainingStats = {
-      data: trainingInfo,
-      logPeriod: logPeriod,
-      totalIterationsCount: parameters.iterations || 10000
-    }
-
-    //var output = net.run([1, 0]);
-    //console.log(output);
-
-    var jsonString = net.toJSON();
-    if (callback) callback(jsonString, trainingStats);
+      runNeuralNetworkWithData(net, data, parameters, callback);
+      break;
+    case "iris":
+      datamanager.getIrisDataset(function(data) {
+        runNeuralNetworkWithData(net, data, parameters, callback);
+      });
+      break;
+    default:
+      console.log("Undefined dataset!");
+      break;
   }
 }
+
+function runNeuralNetworkWithData(network, trainingData, parameters, callback) {
+  console.log("Starting training...")
+  var trainingInfo = network.train(trainingData, {
+              errorThresh: parameters.errorThreshold || 0.005,
+              iterations: parameters.iterations || 10000,
+              log: true,
+              logPeriod: logPeriod,
+              refreshVisWhenLogging: true,
+              learningRate: parameters.learningRate || 0.1
+      });
+  console.log("Training finished!");
+
+  var trainingStats = {
+    data: trainingInfo,
+    logPeriod: logPeriod,
+    totalIterationsCount: parameters.iterations || 10000
+  }
+
+  //var output = network.run([1, 0]);
+  //console.log(output);
+
+  var jsonString = network.toJSON();
+  if (callback) callback(jsonString, trainingStats);
+}
+
 
 // --------------- Socket.IO --------------------------
 var express = require('express'),
@@ -58,11 +71,11 @@ require('./routes.js')(app);
 
 server.listen(process.env.PORT || 3000);
 
-
-
 io.sockets.on('connection', function(socket) {
   socket.on('refresh-viz', function(nnParameters) {
-    //console.log(nnParameters);
+
+    //require("./lib/brain/lib/neuralnetwork.js")(socket);
+
     runNN(function(nnJSON, trainingInfo) {
       io.sockets.emit('refresh-viz', nnJSON);
       io.sockets.emit('refresh-graphs', trainingInfo);

@@ -745,3 +745,15 @@ ul.sidebar-menu li input {
   display: block;
   width: 120px;
 }
+
+.loading-spinner {
+  position: relative;
+  left: 25%;
+  top: 150px;
+}
+.loading-spinner.visible {
+  display: block;
+}
+.loading-spinner.hidden {
+  display: none;
+}

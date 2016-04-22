@@ -56,7 +56,13 @@
                     <input type="submit" class="btn btn-primary" value="Start Training" form="refresh-viz"></input>
 
                     <div id="inputdataarea">
-                      <label><input type="checkbox" value="" name="use-custom-data" style="width: 20px; display: inline" /><span>Use Custom Data</span></label>
+                      <label><span>Dataset</span>
+                        <select name="dataset-select">
+                          <option value='xor'>XOR Logic Gate</option>
+                          <option value='custom'>Custom Data</option>
+                          <option value='iris'>Iris Dataset</option>
+                        </select>
+                      </label>
                       <label><span>Number of input dimensions</span><input type="number" class="inputvaluescount" min="1" max="30" value="2" step="1" /></label>
                       <div id="inputdatatable"></div>
                       <button class="add-input-data-row">
@@ -76,12 +82,13 @@
                   <div class="col-lg-12 main-chart">
 
                     <div class="row mt">
-                      <div class="col-md-8 col-sm-8 mb">
+                      <div class="col-md-7 col-sm-7 mb">
                         <div class="container">
+                          <img src="assets/img/ajax-loader.gif" class='loading-spinner hidden' />
                           <svg class="neuralnetwork"></svg>
                         </div>
                       </div>
-                      <div class="col-md-4 col-sm-4">
+                      <div class="col-md-5 col-sm-5">
                         <div class="content-panel">
                             <div class="panel-body">
                               <div id="error-viz-container">
