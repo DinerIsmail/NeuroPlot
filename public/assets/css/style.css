@@ -737,6 +737,10 @@ PANELS CONFIGURATIONS
 
 /*Custom*/
 
+ul.sidebar-menu {
+  margin-left: 5px;
+}
+
 ul.sidebar-menu li label span {
   color: #fff;
 }

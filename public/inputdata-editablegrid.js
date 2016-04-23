@@ -5,7 +5,7 @@ function setupMetadata(inputCount) {
   metadata = [];
 
   for (var i = 0; i < inputCount; i++) {
-    metadata.push({ name: "input"+i, label: " ", datatype: "integer", editable: true});
+    metadata.push({ name: "input"+i, label: " ", length: 40, datatype: "integer", editable: true});
   }
 
   metadata.push({ name: "output", label: "OUTPUT", datatype: "integer", editable: true});
