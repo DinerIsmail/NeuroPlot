@@ -18,6 +18,7 @@ var outerPad = 0.1,
 var tempColor;
 
 var nnSpec = nnDataTest;
+var nnConnections = [];
 var layerCount = $('.hidden-layers-sizes-area div').length;
 
 var xPos = d3.scale.linear()
@@ -44,6 +45,8 @@ var strokeWidthFunction = function(weight, minWeight, maxWeight) {
 var svg = d3.select(".neuralnetwork")
     .attr("width", width)
     .attr("height", height);
+var connectionsLayer = svg.append('g');
+var nodesLayer = svg.append('g');
 
 var tooltip = d3.select('body').append('div')
         .style('position', 'absolute')
@@ -51,12 +54,7 @@ var tooltip = d3.select('body').append('div')
         .style('background', 'white')
         .style('opacity', 0)
 
-function draw() {
-  var nnConnections = [];
-
-  var drawingLayer1 = svg.append('g');
-  var drawingLayer2 = svg.append('g');
-
+function drawNodes() {
   var layers = nnSpec.layers;
   layers.forEach(function(layer, layerId) {
 
@@ -79,19 +77,23 @@ function draw() {
       }
     }
 
-    var node = drawingLayer2.selectAll("circle.layer"+layerId).data(layerNodes).enter().append('g');
-    node.append("circle")
+    nodesLayer.selectAll("circle.layer"+layerId).data(layerNodes).enter()
+      .append("circle")
       .style("fill", "#268BD2")
-      .transition()
-        .each("start", function() { d3.select(this).attr("r", 10) })
-        .attr("r", nodeRadius)
-        .duration(750)
-        .ease('elastic')
       .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
       .attr("cx", function(d) { return xPos(layerId) })
       .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
+      .attr("r", 10)
+        .transition()
+        .attr("r", nodeRadius)
+        .duration(750)
+        .ease('elastic')
   });
 
+  drawConnections();
+}
+
+function drawConnections() {
   if (nnConnections.length > 0) {
     var allWeights = nnConnections.map(function(conn) { return conn.weight; });
     var minWeight = allWeights.min();
@@ -101,33 +103,65 @@ function draw() {
       var lineData = [{x: connection.x1, y: connection.y1},
                       {x: connection.x2, y: connection.y2}];
 
-      var path = drawingLayer1.append("path").classed("connection", true)
+      connectionsLayer.append("path").classed("connection", true)
               .attr("stroke", function() { return connection.weight >= 0 ? "#3FBF7F" : "#D54848"; })
+              .attr("stroke-width", 2)
+              .transition()
+              .duration(100)
               .attr("stroke-width", function(d, i) {
                 return strokeWidthFunction(Math.abs(connection.weight), minWeight, maxWeight)(Math.abs(connection.weight));
               })
               .attr("fill", "none")
               .attr("d", lineFunction(lineData));
 
-      path.on('mouseover', function(d) {
-        var connectionWeight = Math.round(connection.weight * 1000) / 1000;
-
-        tooltip.transition().duration(100)
-          .style('opacity', .9)
-        tooltip.html(connectionWeight)
-          .style('left', (d3.event.pageX - 35) + 'px')
-          .style('top', (d3.event.pageY) + 'px')
-
-      }).on('mouseout', function(d) {
-        tooltip.transition().duration(100)
-          .style('opacity', 0)
-      });
+      // path.on('mouseover', function(d) {
+      //   var connectionWeight = Math.round(connection.weight * 1000) / 1000;
+      //
+      //   tooltip.transition().duration(100)
+      //     .style('opacity', .9)
+      //   tooltip.html(connectionWeight)
+      //     .style('left', (d3.event.pageX - 35) + 'px')
+      //     .style('top', (d3.event.pageY) + 'px')
+      //
+      // }).on('mouseout', function(d) {
+      //   tooltip.transition().duration(100)
+      //     .style('opacity', 0)
+      // });
     });
   }
 }
 
+function updateConnections() {
+  $(".neuralnetwork g").first().empty();
+  nnConnections = [];
+
+  var layers = nnSpec.layers;
+  layers.forEach(function(layer, layerId) {
+
+    for (var i = 0; i < layer.size; i++) {
+
+      if (layerId > 0) {
+        // For second layer and forth, start building nnConnections array
+        for (var j = 0; j < Object.keys(layer[i].weights).length; j++) {
+          var connection = {
+            "x1": xPos(layerId-1),
+            "y1": yPos(layerId-1)(j) + height/(nnSpec.layers[layerId-1].size)/2,
+            "x2": xPos(layerId),
+            "y2": yPos(layerId)(i) + height/layer.size/2,
+            "weight": layer[i].weights[j]
+          }
+
+          nnConnections.push(connection);
+        }
+      }
+    }
+  });
+
+  drawConnections();
+}
+
 function clearVis() {
-  $(".neuralnetwork").empty();
+  $(".neuralnetwork g").empty();
 }
 
 $(document).ready(function() {
@@ -157,6 +191,9 @@ $(document).ready(function() {
     loadingSpinner.addClass("visible").removeClass("hidden");
     socket.emit('refresh-viz', parameters);
     clearVis();
+    if ($("#error-viz-container").highcharts()) {
+      $("#error-viz-container").highcharts().series[0].setData([]);
+    }
   });
 
   function refreshParameters() {
@@ -171,18 +208,25 @@ $(document).ready(function() {
     }
   }
 
+  // Refresh the nn viz on refresh
+  $("#refresh-viz").submit();
+  drawErrorGraph();
+
   socket.on('refresh-viz', function(nnJSON) {
-    nnSpec = nnJSON;
-    draw();
+    //nnSpec = nnJSON;
+    //draw();
+  });
+
+  socket.on('draw-vis-initial', function(trainingData) {
+    nnSpec = trainingData.nnSpec;
     loadingSpinner.addClass("hidden").removeClass("visible");
+    drawNodes();
   });
 
-  socket.on('refresh-graphs', function(trainingStats) {
-    drawErrorGraph(trainingStats);
-  });
-
-  socket.on('refresh-vis-live', function(trainingStatsLive) {
-    console.log("Working");
+  socket.on('refresh-graph-live', function(trainingDataLive) {
+    addErrorPoints(trainingDataLive.errorData);
+    nnSpec = trainingDataLive.nnSpec;
+    updateConnections();
   });
 
   addLayerButton.click(function() {
@@ -225,9 +269,6 @@ $(document).ready(function() {
       "nnParameters": parameters
     });
   });
-
-  // Refresh the nn viz on refresh
-  $("#refresh-viz").submit();
 
   datasetSelect.change(function() {
     switch($(this).val()) {

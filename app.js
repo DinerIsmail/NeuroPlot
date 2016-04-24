@@ -1,15 +1,20 @@
 var brain = require('./lib/brain/lib/brain');
 var datamanager = require('./src/utils/datamanager');
 
-// Constants
-var logPeriod = 10;
+var LOG_PERIOD = 50;
+
+// --------------- Socket.IO --------------------------
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server);
+require('./routes.js')(app);
 
 var network;
-
 function runNN(parameters, callback) {
   network = new brain.NeuralNetwork({
       hiddenLayers: parameters.layerSizes || []
-  });
+  }, io);
 
   switch (parameters.dataset) {
     case "custom":
@@ -43,7 +48,7 @@ function trainNeuralNetwork(trainingData, parameters, callback) {
               errorThresh: parameters.errorThreshold || 0.005,
               iterations: parameters.iterations || 10000,
               log: true,
-              logPeriod: logPeriod,
+              logPeriod: LOG_PERIOD,
               refreshVisWhenLogging: true,
               learningRate: parameters.learningRate || 0.1
       });
@@ -51,7 +56,7 @@ function trainNeuralNetwork(trainingData, parameters, callback) {
 
   var trainingStats = {
     data: trainingInfo,
-    logPeriod: logPeriod,
+    logPeriod: LOG_PERIOD,
     totalIterationsCount: parameters.iterations || 10000
   }
 
@@ -66,20 +71,15 @@ function testNeuralNetwork(testingData, parameters, callback) {
   if (callback) callback(output);
 }
 
-// --------------- Socket.IO --------------------------
-var express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
-require('./routes.js')(app);
+
 
 server.listen(process.env.PORT || 3000);
 
 io.sockets.on('connection', function(socket) {
   socket.on('refresh-viz', function(nnParameters) {
     runNN(nnParameters, function(nnJSON, trainingInfo) {
-      io.sockets.emit('refresh-viz', nnJSON);
-      io.sockets.emit('refresh-graphs', trainingInfo);
+      //io.sockets.emit('refresh-viz', nnJSON);
+      //io.sockets.emit('refresh-graphs', trainingInfo);
     });
   });
 

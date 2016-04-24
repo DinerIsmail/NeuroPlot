@@ -5,11 +5,25 @@
 
 function drawErrorGraph(trainingStats) {
   // If there's no training info to process, don't show anything
-  if (trainingStats.length == 0 || trainingStats.data.length == 0) return;
+  //if (trainingStats.length == 0 || trainingStats.data.length == 0) return;
 
-  var errorsArray = trainingStats.data.map(function(singleStat) { return Math.round(singleStat.error * 1000)/1000 });
+  //var errorsArray = trainingStats.data.map(function(singleStat) { return Math.round(singleStat.error * 1000)/1000 });
+  //var newErrorPoint = Math.round(trainingStats.error * 1000)/1000;
 
   $("#error-viz-container").highcharts({
+    // chart: {
+    //   events: {
+    //     load: function() {
+    //       var series = this.series[0];
+    //
+    //       setInterval(function () {
+    //                     var x = (new Date()).getTime(), // current time
+    //                         y = Math.round(Math.random() * 100);
+    //                     series.addPoint([x, y], true, true);
+    //                 }, 10);
+    //     }
+    //   }
+    // },
     title: {
       text: "Global Error"
     },
@@ -27,7 +41,7 @@ function drawErrorGraph(trainingStats) {
       title: {
         text: "Epoch"
       },
-      tickInterval: trainingStats.logPeriod
+      tickInterval: 10
     },
     yAxis: {
       title: {
@@ -51,7 +65,25 @@ function drawErrorGraph(trainingStats) {
     },
     series: [{
       name: 'Training Error',
-      data: errorsArray
-    }]
+      data: [] //errorsArray
+    }],
+    exporting: {
+      enabled: false
+    }
   })
+}
+
+function addErrorPoints(newPointsArray) {
+  var chart = $("#error-viz-container").highcharts();
+
+  for (var i = 0; i < newPointsArray.length; i++) {
+    chart.series[0].addPoint({
+      x: newPointsArray[i].iterations,
+      y: Math.round(newPointsArray[i].error * 1000)/1000
+    }, false);
+  }
+
+  chart.isDirty = true;
+  chart.redraw();
+  chart.reflow();
 }
