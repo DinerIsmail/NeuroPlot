@@ -77,17 +77,25 @@ function drawNodes() {
       }
     }
 
-    nodesLayer.selectAll("circle.layer"+layerId).data(layerNodes).enter()
-      .append("circle")
+    var nodes = nodesLayer.selectAll("circle.layer"+layerId).data(layerNodes);
+
+    var nodeEnter = nodes.enter()
+      .append("g")
+      .attr("transform", function(d, i) { return "translate("+ xPos(layerId) +","+ parseInt(yPos(layerId)(i) + height/(layer.size)/2) + ")" });
+
+    var circle = nodeEnter.append("circle")
       .style("fill", "#268BD2")
-      .attr("cy", function(d, i) { return yPos(layerId)(i) + height/(layer.size)/2 })
-      .attr("cx", function(d) { return xPos(layerId) })
       .attr("class", function(d, i) { return "node"+layerId+i + " node"; })
       .attr("r", 10)
         .transition()
         .attr("r", nodeRadius)
         .duration(750)
-        .ease('elastic')
+        .ease('elastic');
+
+    nodeEnter.append("text")
+      .attr("dx", function(d) { return -13; })
+      .attr("fill", "#fff")
+      .text(function(d, i) { return layer[i].output ? Math.round(layer[i].output * 100)/100 : "" });
   });
 
   drawConnections();
