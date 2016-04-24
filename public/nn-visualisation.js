@@ -94,6 +94,7 @@ function drawNodes() {
 
     nodeEnter.append("text")
       .attr("dx", function(d) { return -13; })
+      .attr("dy", function(d) { return 4; })
       .attr("fill", "#fff")
       .text(function(d, i) { return layer[i].output ? Math.round(layer[i].output * 100)/100 : "" });
   });
@@ -199,9 +200,8 @@ $(document).ready(function() {
     loadingSpinner.addClass("visible").removeClass("hidden");
     socket.emit('refresh-viz', parameters);
     clearVis();
-    if ($("#error-viz-container").highcharts()) {
-      $("#error-viz-container").highcharts().series[0].setData([]);
-    }
+
+    drawErrorGraph();
   });
 
   function refreshParameters() {
@@ -218,7 +218,7 @@ $(document).ready(function() {
 
   // Refresh the nn viz on refresh
   $("#refresh-viz").submit();
-  drawErrorGraph();
+  //drawErrorGraph();
 
   socket.on('refresh-viz', function(nnJSON) {
     //nnSpec = nnJSON;

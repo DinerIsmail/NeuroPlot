@@ -3,39 +3,54 @@
   how the neural network is performing
 */
 
+var errorChart;
+var clearSavedButton = $("[name='clear-saved']");
+var saveEnabledCheckbox = $("[name='save-enabled']");
+var currentSeries = 0;
+var seriesOptions = [{
+  name: "1",
+  data: [],
+  color: "#268BD2"
+}];
+var firstSeriesOptions = {};
+
+saveEnabledCheckbox.change(function() {
+  if ($(this).is(":checked")) {
+    currentSeries = 1;
+
+    clearSavedButton.removeAttr('disabled');
+  } else {
+    currentSeries = 0;
+  }
+});
+
+clearSavedButton.click(function() {
+  clearSavedButton.attr('disabled', 'disabled');
+  errorChart.series[1].remove(true);
+  saveEnabledCheckbox.prop('checked', false);
+  currentSeries = 0;
+});
+
 function drawErrorGraph(trainingStats) {
   // If there's no training info to process, don't show anything
   //if (trainingStats.length == 0 || trainingStats.data.length == 0) return;
 
-  //var errorsArray = trainingStats.data.map(function(singleStat) { return Math.round(singleStat.error * 1000)/1000 });
-  //var newErrorPoint = Math.round(trainingStats.error * 1000)/1000;
-
-  $("#error-viz-container").highcharts({
-    // chart: {
-    //   events: {
-    //     load: function() {
-    //       var series = this.series[0];
-    //
-    //       setInterval(function () {
-    //                     var x = (new Date()).getTime(), // current time
-    //                         y = Math.round(Math.random() * 100);
-    //                     series.addPoint([x, y], true, true);
-    //                 }, 10);
-    //     }
-    //   }
-    // },
+  var options = {
+    chart: {
+      renderTo: 'error-viz-container'
+    },
     title: {
-      text: "Global Error"
+      text: 'Global Error'
     },
     legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 270,
-            y: 50,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'top',
+      x: 0,
+      y: 50,
+      floating: true,
+      borderWidth: 1,
+      backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
     },
     xAxis: {
       title: {
@@ -63,27 +78,29 @@ function drawErrorGraph(trainingStats) {
           fillOpacity: 0.5
       }
     },
-    series: [{
-      name: 'Training Error',
-      data: [] //errorsArray
-    }],
-    exporting: {
-      enabled: false
-    }
-  })
+    series: []
+  };
+
+  if (currentSeries == 0) seriesOptions[0].data = [];
+  options.series.push(seriesOptions[0]);
+  if (currentSeries > 0) {
+    options.series.push({
+      name: parseInt(options.series.length+1),
+      data: [],
+      color: "#3FBF7F"
+    })
+  }
+
+  errorChart = new Highcharts.Chart(options);
 }
 
 function addErrorPoints(newPointsArray) {
-  var chart = $("#error-viz-container").highcharts();
-
   for (var i = 0; i < newPointsArray.length; i++) {
-    chart.series[0].addPoint({
+    errorChart.series[currentSeries].addPoint({
       x: newPointsArray[i].iterations,
       y: Math.round(newPointsArray[i].error * 1000)/1000
     }, false);
   }
 
-  chart.isDirty = true;
-  chart.redraw();
-  chart.reflow();
+  errorChart.redraw();
 }
