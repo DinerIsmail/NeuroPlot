@@ -112,30 +112,30 @@ function drawConnections() {
       var lineData = [{x: connection.x1, y: connection.y1},
                       {x: connection.x2, y: connection.y2}];
 
-      connectionsLayer.append("path").classed("connection", true)
+      var path = connectionsLayer.append("path").classed("connection", true)
               .attr("stroke", function() { return connection.weight >= 0 ? "#3FBF7F" : "#D54848"; })
               .attr("stroke-width", 2)
-              .transition()
-              .duration(100)
-              .attr("stroke-width", function(d, i) {
-                return strokeWidthFunction(Math.abs(connection.weight), minWeight, maxWeight)(Math.abs(connection.weight));
-              })
               .attr("fill", "none")
               .attr("d", lineFunction(lineData));
+      path.transition()
+        .duration(100)
+        .attr("stroke-width", function(d, i) {
+          return strokeWidthFunction(Math.abs(connection.weight), minWeight, maxWeight)(Math.abs(connection.weight));
+        })
 
-      // path.on('mouseover', function(d) {
-      //   var connectionWeight = Math.round(connection.weight * 1000) / 1000;
-      //
-      //   tooltip.transition().duration(100)
-      //     .style('opacity', .9)
-      //   tooltip.html(connectionWeight)
-      //     .style('left', (d3.event.pageX - 35) + 'px')
-      //     .style('top', (d3.event.pageY) + 'px')
-      //
-      // }).on('mouseout', function(d) {
-      //   tooltip.transition().duration(100)
-      //     .style('opacity', 0)
-      // });
+      path.on('mouseover', function(d) {
+        var connectionWeight = Math.round(connection.weight * 1000) / 1000;
+
+        tooltip.transition().duration(100)
+          .style('opacity', .9)
+        tooltip.html(connectionWeight)
+          .style('left', (d3.event.pageX - 35) + 'px')
+          .style('top', (d3.event.pageY) + 'px')
+
+      }).on('mouseout', function(d) {
+        tooltip.transition().duration(100)
+          .style('opacity', 0)
+      });
     });
   }
 }
@@ -218,12 +218,11 @@ $(document).ready(function() {
 
   // Refresh the nn viz on refresh
   $("#refresh-viz").submit();
-  //drawErrorGraph();
 
-  socket.on('refresh-viz', function(nnJSON) {
+  //socket.on('refresh-viz', function(nnJSON) {
     //nnSpec = nnJSON;
     //draw();
-  });
+  //});
 
   socket.on('draw-vis-initial', function(trainingData) {
     nnSpec = trainingData.nnSpec;
