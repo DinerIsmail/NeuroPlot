@@ -5,8 +5,13 @@ var csv = require('fast-csv');
 
 var allInputVals = [];
 
-function getIrisDataset(callback) {
-  fs.readFile('./data/iris.txt','utf8', function(err, data) {
+function getIrisDataset(callback, forTesting) {
+  var fileName = "iris.txt";
+  if (forTesting && forTesting == true) {
+    fileName = "iris_test.txt";
+  }
+
+  fs.readFile('./data/' + fileName,'utf8', function(err, data) {
 	   if(err) throw err;
 
      var lines = data.split("\n");
@@ -29,7 +34,6 @@ function getIrisDataset(callback) {
     		});
     	}
 
-      //var maxVal = getMaxVal(allInputVals);
       var parsedInputData = parseIrisDataForNN(trainingData);
       trainingData = parsedInputData;
 
@@ -64,77 +68,62 @@ function getMaxVal(allVals) {
   return maxVal;
 }
 
-function getData(type, callback) {
-    var dataRows = [];
-    var fileName = "train.csv";
-    if (type == "train") {
-      fileName = "train2.csv";
-    } else {
-      fileName = "test.csv";
-    }
-
-    csv.fromPath("./data/" + fileName)
-     .on("data", function(data){
-        dataRows.push(data);
-     })
-     .on("end", function(){
-        if (callback) callback(dataRows);
-     });
-}
+// function getData(type, callback) {
+//     var dataRows = [];
+//     var fileName = "train.csv";
+//     if (type == "train") {
+//       fileName = "train2.csv";
+//     } else {
+//       fileName = "test.csv";
+//     }
+//
+//     csv.fromPath("./data/" + fileName)
+//      .on("data", function(data){
+//         dataRows.push(data);
+//      })
+//      .on("end", function(){
+//         if (callback) callback(dataRows);
+//      });
+// }
 
 function parseIrisDataForNN(dataRows) {
   var parsedData = [];
   dataRows.forEach(function(dataRow) {
-    //var parsedDataRow = parseDataRow(dataRow);
     parsedData.push({
             input: dataRow.input.map(function(d) { return d/7.9 }),
             output: dataRow.output
         });
   });
 
-//   function parseDataRow(data) {
-//     var parsedDataObject = {
-//         input: [],
-//         output: data.output
-//     };
-//     data = data.slice(1);
-
-//     data.forEach(function(datum) {
-//        parsedDataObject.input.push(datum/7.9)
-//     });
-
-//     return parsedDataObject;
-//   }
-
   return parsedData;
 }
 
-function parseMnistDataForNN(dataRows) {
-    var parsedData = [];
-    dataRows.forEach(function(dataRow) {
-        var parsedDataRow = parseDataRow(dataRow);
-        parsedData.push(parsedDataRow);
-    });
-
-    function parseDataRow(data) {
-        var parsedDataObject = {
-            input: [],
-            output: [data[0]/10]
-        };
-        data = data.slice(1);
-
-        data.forEach(function(datum) {
-            parsedDataObject.input.push(datum/255);
-        });
-
-        return parsedDataObject;
-    }
-
-    return parsedData;
-}
+// function parseMnistDataForNN(dataRows) {
+//     var parsedData = [];
+//     dataRows.forEach(function(dataRow) {
+//         var parsedDataRow = parseDataRow(dataRow);
+//         parsedData.push(parsedDataRow);
+//     });
+//
+//     function parseDataRow(data) {
+//         var parsedDataObject = {
+//             input: [],
+//             output: [data[0]/10]
+//         };
+//         data = data.slice(1);
+//
+//         data.forEach(function(datum) {
+//             parsedDataObject.input.push(datum/255);
+//         });
+//
+//         return parsedDataObject;
+//     }
+//
+//     return parsedData;
+// }
 
 module.exports = {
-    getData: getData,
+    //getData: getData,
     getIrisDataset: getIrisDataset,
-    parseMnistDataForNN: parseMnistDataForNN
+    //parseMnistDataForNN: parseMnistDataForNN
 }

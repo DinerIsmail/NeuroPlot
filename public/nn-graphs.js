@@ -40,7 +40,7 @@ function drawErrorGraph(trainingStats) {
       renderTo: 'error-viz-container'
     },
     title: {
-      text: 'Global Error'
+      text: 'RMS Error'
     },
     legend: {
       layout: 'vertical',
@@ -54,7 +54,7 @@ function drawErrorGraph(trainingStats) {
     },
     xAxis: {
       title: {
-        text: "Epoch"
+        text: "Iteration"
       },
       tickInterval: 10
     },
