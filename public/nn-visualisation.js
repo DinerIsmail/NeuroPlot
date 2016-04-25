@@ -187,6 +187,9 @@ $(document).ready(function() {
   var datasetSelect = $("[name='dataset-select']");
   var loadingSpinner = $(".loading-spinner");
 
+  var testResultsCorrect = $(".correct-tests-results");
+  var testResultsWrong = $(".wrong-tests-results");
+
   var testDataInput = $(".test-data");
   var testDataButton = $(".test-data-button");
 
@@ -219,11 +222,6 @@ $(document).ready(function() {
   // Refresh the nn viz on refresh
   $("#refresh-viz").submit();
 
-  //socket.on('refresh-viz', function(nnJSON) {
-    //nnSpec = nnJSON;
-    //draw();
-  //});
-
   socket.on('draw-vis-initial', function(trainingData) {
     nnSpec = trainingData.nnSpec;
     loadingSpinner.addClass("hidden").removeClass("visible");
@@ -234,6 +232,11 @@ $(document).ready(function() {
     addErrorPoints(trainingDataLive.errorData);
     nnSpec = trainingDataLive.nnSpec;
     updateConnections();
+  });
+
+  socket.on('testing-finished', function(testingResults) {
+    testResultsCorrect.html(testingResults.correct);
+    testResultsWrong.html(testingResults.wrong);
   });
 
   addLayerButton.click(function() {
@@ -284,7 +287,7 @@ $(document).ready(function() {
         break;
       default:
         testDataInput.val("");
-        console.log("Dataset type unrecognized!");
+        
         break;
     }
   });

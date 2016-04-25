@@ -41,8 +41,20 @@ function getIrisDataset(callback, forTesting) {
    });
 }
 
+function parseIrisDataForNN(dataRows) {
+  var parsedData = [];
+  dataRows.forEach(function(dataRow) {
+    parsedData.push({
+            input: dataRow.input.map(function(d) { return d/7.9 }),
+            output: dataRow.output
+        });
+  });
+
+  return parsedData;
+}
+
 // Helper functions - Iris Dataset
-function getFlowerName(arr){
+function getFlowerName(arr) {
 	var index = getLargestIndex(arr);
 	if(index == 0)
 		return "Iris-setosa";
@@ -68,7 +80,7 @@ function getMaxVal(allVals) {
   return maxVal;
 }
 
-// function getData(type, callback) {
+// function getMnistData(type, callback) {
 //     var dataRows = [];
 //     var fileName = "train.csv";
 //     if (type == "train") {
@@ -85,18 +97,6 @@ function getMaxVal(allVals) {
 //         if (callback) callback(dataRows);
 //      });
 // }
-
-function parseIrisDataForNN(dataRows) {
-  var parsedData = [];
-  dataRows.forEach(function(dataRow) {
-    parsedData.push({
-            input: dataRow.input.map(function(d) { return d/7.9 }),
-            output: dataRow.output
-        });
-  });
-
-  return parsedData;
-}
 
 // function parseMnistDataForNN(dataRows) {
 //     var parsedData = [];
@@ -123,7 +123,8 @@ function parseIrisDataForNN(dataRows) {
 // }
 
 module.exports = {
-    //getData: getData,
+    //getMnistData: getData,
+    //parseMnistDataForNN: parseMnistDataForNN,
     getIrisDataset: getIrisDataset,
-    //parseMnistDataForNN: parseMnistDataForNN
+    getFlowerName: getFlowerName
 }

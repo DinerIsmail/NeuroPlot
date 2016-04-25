@@ -9,6 +9,7 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server);
 require('./routes.js')(app);
+// ----------------------------------------------------
 
 var network;
 function runNN(parameters, callback) {
@@ -35,6 +36,31 @@ function runNN(parameters, callback) {
     case "iris":
       datamanager.getIrisDataset(function(data) {
         trainNeuralNetwork(data, parameters, callback);
+
+        datamanager.getIrisDataset(function(testingData) {
+
+          console.log("\n\nResults\n===============================\n");
+
+          var testingResults = {
+            correct: 0,
+            wrong: 0
+          }
+
+      		for(var i = 0; i < testingData.length; i++) {
+            var input = testingData[i].input;
+            var actualOutput = datamanager.getFlowerName(network.run(input));
+            var idealOutput = datamanager.getFlowerName(testingData[i].output);
+            if (actualOutput == idealOutput) {
+              testingResults.correct++;
+            } else {
+              testingResults.wrong++;
+            }
+            console.log("Actual: " + actualOutput + ", Ideal: " + idealOutput);
+            console.log(testingResults.correct + " out of " + (parseInt(testingResults.correct) + parseInt(testingResults.wrong)) + " total");
+          }
+
+          io.sockets.emit('testing-finished', testingResults);
+        }, true);
       });
       break;
     default:
@@ -50,7 +76,7 @@ function trainNeuralNetwork(trainingData, parameters, callback) {
               log: true,
               logPeriod: LOG_PERIOD,
               refreshVisWhenLogging: true,
-              learningRate: parameters.learningRate || 0.1
+              learningRate: parameters.learningRate || 0.3
       });
   console.log("Training finished!");
 
@@ -64,13 +90,12 @@ function trainNeuralNetwork(trainingData, parameters, callback) {
   if (callback) callback(jsonString, trainingStats);
 }
 
-function testNeuralNetwork(testingData, parameters, callback) {
+function testNeuralNetworkWithCustomInput(testingData, parameters, callback) {
   var output = network.run(testingData);
   console.log(output);
 
   if (callback) callback(output);
 }
-
 
 
 server.listen(process.env.PORT || 3000);
@@ -84,7 +109,7 @@ io.sockets.on('connection', function(socket) {
   });
 
   socket.on('test-data', function(dataAndParamsObj) {
-    testNeuralNetwork(dataAndParamsObj.testData, dataAndParamsObj.nnParameters, function(results) {
+    testNeuralNetworkWithCustomInput(dataAndParamsObj.testData, dataAndParamsObj.nnParameters, function(results) {
 
     });
   });
