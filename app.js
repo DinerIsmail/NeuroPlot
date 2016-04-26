@@ -39,7 +39,7 @@ function runNN(parameters, callback) {
 
         datamanager.getIrisDataset(function(testingData) {
 
-          console.log("\n\nResults\n===============================\n");
+          //console.log("\n\nResults\n===============================\n");
 
           var testingResults = {
             correct: 0,
@@ -55,8 +55,8 @@ function runNN(parameters, callback) {
             } else {
               testingResults.wrong++;
             }
-            console.log("Actual: " + actualOutput + ", Ideal: " + idealOutput);
-            console.log(testingResults.correct + " out of " + (parseInt(testingResults.correct) + parseInt(testingResults.wrong)) + " total");
+            //console.log("Actual: " + actualOutput + ", Ideal: " + idealOutput);
+            //console.log(testingResults.correct + " out of " + (parseInt(testingResults.correct) + parseInt(testingResults.wrong)) + " total");
           }
 
           io.sockets.emit('testing-finished', testingResults);
@@ -103,8 +103,7 @@ server.listen(process.env.PORT || 3000);
 io.sockets.on('connection', function(socket) {
   socket.on('refresh-viz', function(nnParameters) {
     runNN(nnParameters, function(nnJSON, trainingInfo) {
-      //io.sockets.emit('refresh-viz', nnJSON);
-      //io.sockets.emit('refresh-graphs', trainingInfo);
+      // Front-end visusalisations are updated during training, from neuralnetwork.js
     });
   });
 
