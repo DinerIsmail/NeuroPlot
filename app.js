@@ -12,10 +12,10 @@ require('./routes.js')(app);
 // ----------------------------------------------------
 
 //var network;
-function runNN(parameters, callback) {
+function runNN(parameters, callback, socket) {
   var network = new brain.NeuralNetwork({
       hiddenLayers: parameters.layerSizes || []
-  }, io);
+  }, socket);
 
   switch (parameters.dataset) {
     case "custom":
@@ -102,11 +102,10 @@ server.listen(process.env.PORT || 3000);
 
 io.sockets.on('connection', function(socket) {
 
-
   socket.on('refresh-viz', function(nnParameters) {
     runNN(nnParameters, function(nnJSON, trainingInfo) {
       // Front-end visusalisations are updated during training, from neuralnetwork.js
-    });
+    }, socket);
   });
 
   socket.on('test-data', function(dataAndParamsObj) {
