@@ -11,11 +11,8 @@ Array.prototype.insert = function(index, item) {
 };
 
 var height = 600,
-    width = 1300,
+    width = 1000,
     nodeRadius = 30;
-var outerPad = 0.1,
-    pad = 0;
-var tempColor;
 
 var nnSpec = nnDataTest;
 var nnConnections = [];
@@ -45,6 +42,7 @@ var strokeWidthFunction = function(weight, minWeight, maxWeight) {
 var svg = d3.select(".neuralnetwork")
     .attr("width", width)
     .attr("height", height);
+// The 2 main svg layers, created as 2 separated groups
 var connectionsLayer = svg.append('g');
 var nodesLayer = svg.append('g');
 
@@ -205,6 +203,9 @@ $(document).ready(function() {
     clearVis();
 
     drawErrorGraph();
+
+    testResultsCorrect.html("");
+    testResultsWrong.html("");
   });
 
   function refreshParameters() {
@@ -287,7 +288,7 @@ $(document).ready(function() {
         break;
       default:
         testDataInput.val("");
-        
+
         break;
     }
   });
