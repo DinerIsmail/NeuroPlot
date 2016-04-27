@@ -12,6 +12,12 @@ module.exports = function(app) {
   app.get('/nn-graphs.js', function(req, res) {
     res.sendFile(__dirname + '/public/nn-graphs.js');
   });
+  app.get('/sockets.js', function(req, res) {
+    res.sendFile(__dirname + '/public/sockets.js');
+  });
+  app.get('/utils.js', function(req, res) {
+    res.sendFile(__dirname + '/public/utils.js');
+  });
 
   // EditableGrid
   app.get('/inputdata-editablegrid.js', function(req, res) {

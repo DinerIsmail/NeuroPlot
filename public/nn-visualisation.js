@@ -1,15 +1,3 @@
-// Augmenting the Array prototype with max, min and insert functions
-Array.prototype.max = function() {
-  return Math.max.apply(null, this);
-};
-Array.prototype.min = function() {
-  return Math.min.apply(null, this);
-};
-Array.prototype.insert = function(index, item) {
-  this.splice(index, 0, item);
-  return this;
-};
-
 var height = 600,
     width = 1000,
     nodeRadius = 30;
@@ -187,6 +175,7 @@ $(document).ready(function() {
 
   var testResultsCorrect = $(".correct-tests-results");
   var testResultsWrong = $(".wrong-tests-results");
+  var finalErrorValue = $(".final-error-value");
 
   var testDataInput = $(".test-data");
   var testDataButton = $(".test-data-button");
@@ -238,6 +227,10 @@ $(document).ready(function() {
   socket.on('testing-finished', function(testingResults) {
     testResultsCorrect.html(testingResults.correct);
     testResultsWrong.html(testingResults.wrong);
+  });
+
+  socket.on('final-error-data', function(finalErrorData) {
+    finalErrorValue.html(Math.round($(finalErrorData.data).last()[0].error * 1000) / 1000);
   });
 
   addLayerButton.click(function() {

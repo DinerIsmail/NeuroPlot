@@ -1,7 +1,7 @@
 var brain = require('./lib/brain/lib/brain');
-var datamanager = require('./src/utils/datamanager');
+var datamanager = require('./datamanager');
 
-var LOG_PERIOD = 20;
+var LOG_PERIOD = 50;
 
 // --------------- Socket.IO --------------------------
 var express = require('express'),
@@ -11,7 +11,6 @@ var express = require('express'),
 require('./routes.js')(app);
 // ----------------------------------------------------
 
-//var network;
 function runNN(parameters, callback, socket) {
   var network = new brain.NeuralNetwork({
       hiddenLayers: parameters.layerSizes || []
@@ -105,12 +104,15 @@ io.sockets.on('connection', function(socket) {
   socket.on('refresh-viz', function(nnParameters) {
     runNN(nnParameters, function(nnJSON, trainingInfo) {
       // Front-end visusalisations are updated during training, from neuralnetwork.js
+
+      // Final error after training sent back to client-side
+      socket.emit("final-error-data", trainingInfo);
     }, socket);
   });
 
   socket.on('test-data', function(dataAndParamsObj) {
-    // testNeuralNetworkWithCustomInput(dataAndParamsObj.testData, dataAndParamsObj.nnParameters, function(results) {
-    //
-    // });
+    testNeuralNetworkWithCustomInput(dataAndParamsObj.testData, dataAndParamsObj.nnParameters, function(results) {
+
+    });
   });
 });
