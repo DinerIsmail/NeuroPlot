@@ -79,51 +79,7 @@ function getMaxVal(allVals) {
   return maxVal;
 }
 
-// function getMnistData(type, callback) {
-//     var dataRows = [];
-//     var fileName = "train.csv";
-//     if (type == "train") {
-//       fileName = "train2.csv";
-//     } else {
-//       fileName = "test.csv";
-//     }
-//
-//     csv.fromPath("./data/" + fileName)
-//      .on("data", function(data){
-//         dataRows.push(data);
-//      })
-//      .on("end", function(){
-//         if (callback) callback(dataRows);
-//      });
-// }
-
-// function parseMnistDataForNN(dataRows) {
-//     var parsedData = [];
-//     dataRows.forEach(function(dataRow) {
-//         var parsedDataRow = parseDataRow(dataRow);
-//         parsedData.push(parsedDataRow);
-//     });
-//
-//     function parseDataRow(data) {
-//         var parsedDataObject = {
-//             input: [],
-//             output: [data[0]/10]
-//         };
-//         data = data.slice(1);
-//
-//         data.forEach(function(datum) {
-//             parsedDataObject.input.push(datum/255);
-//         });
-//
-//         return parsedDataObject;
-//     }
-//
-//     return parsedData;
-// }
-
 module.exports = {
-    //getMnistData: getData,
-    //parseMnistDataForNN: parseMnistDataForNN,
     getIrisDataset: getIrisDataset,
     getFlowerName: getFlowerName
 }
